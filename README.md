@@ -3,6 +3,8 @@
 Mit Nico Haisch, Friedrich Röntsch und Moritz Hausmann.
 Abgabetermin ist der 02.06.2022.
 
+**JEDE FUNKTION AUßER DUMP DARF NUR LOGARITHMISCHE LAUFZEIT HABEN**
+
 ## COMMIT-ETIQUETTE:
 An folgende Commit-Etiquette ist sich zu halten.
 https://www.conventionalcommits.org/en/v1.0.0/
