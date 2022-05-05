@@ -6,6 +6,7 @@ Abgabetermin ist der ??.??.????
 ## COMMIT-ETIQUETTE:
 An folgende Commit-Etiquette ist sich zu halten.
 https://www.conventionalcommits.org/en/v1.0.0/
+
 Link zur weiteren Erklärung der Keywords am Beginn des Statements.
 https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
 
