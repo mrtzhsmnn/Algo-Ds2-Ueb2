@@ -2,11 +2,11 @@
 using uint = unsigned int;
 
 // Als Binomial-Halde implementierte Minimum-Vorrangwarteschlange
-// mit PrioritÃ¤ten des Typs P und zusÃ¤tzlichen Daten des Typs D.
-// An der Stelle, an der BinHeap fÃ¼r einen bestimmten Typ P verwendet
-// wird, muss ein Kleiner-Operator (<) fÃ¼r den Typ P bekannt sein.
-// Werte des Typs P dÃ¼rfen nur mit diesem Operator verglichen werden;
-// die Ã¼brigen Vergleichsoperatoren (<=, >, >=, ==, !=) dÃ¼rfen nicht
+// mit Prioritäten des Typs P und zusätzlichen Daten des Typs D.
+// An der Stelle, an der BinHeap für einen bestimmten Typ P verwendet
+// wird, muss ein Kleiner-Operator (<) für den Typ P bekannt sein.
+// Werte des Typs P dürfen nur mit diesem Operator verglichen werden;
+// die übrigen Vergleichsoperatoren (<=, >, >=, ==, !=) dürfen nicht
 // verwendet werden.
 template <typename P, typename D>
 struct BinHeap {
@@ -14,46 +14,46 @@ struct BinHeap {
     struct Node;
 
     // Eintrag einer solchen Warteschlange bzw. Halde, bestehend aus
-    // einer PrioritÃ¤t prio mit Typ P und zusÃ¤tzlichen Daten data mit
+    // einer Priorität prio mit Typ P und zusätzlichen Daten data mit
     // Typ D.
-    // Wenn der Eintrag momentan tatsÃ¤chlich zu einer Halde gehÃ¶rt,
-    // verweist node auf den zugehÃ¶rigen Knoten eines Binomialbaums
+    // Wenn der Eintrag momentan tatsächlich zu einer Halde gehört,
+    // verweist node auf den zugehörigen Knoten eines Binomialbaums
     // dieser Halde; andernfalls ist node ein Nullzeiger.
     struct Entry {
-        // PrioritÃ¤t, zusÃ¤tzliche Daten und zugehÃ¶riger Knoten.
+        // Priorität, zusätzliche Daten und zugehöriger Knoten.
         P prio;
         D data;
         Node* node;
 
-        // Initialisierung mit PrioritÃ¤t p und zusÃ¤tzlichen Daten d.
+        // Initialisierung mit Priorität p und zusätzlichen Daten d.
         Entry (P p, D d) : prio(p), data(d), node(nullptr) {}
     };
 
     // Knoten eines Binomialbaums innerhalb einer solchen Halde.
     // Neben den eigentlichen Knotendaten (degree, parent, child,
-    // sibling), enthÃ¤lt der Knoten einen Verweis auf den zugehÃ¶rigen
+    // sibling), enthält der Knoten einen Verweis auf den zugehörigen
     // Eintrag.
     struct Node {
-        // ZugehÃ¶riger Eintrag.
+        // Zugehöriger Eintrag.
         Entry* entry;
 
         // Grad des Knotens.
         uint degree;
 
-        // VorgÃ¤nger (falls vorhanden; Nullzeiger bei einem Wurzelknoten).
+        // Vorgänger (falls vorhanden; Nullzeiger bei einem Wurzelknoten).
         Node* parent;
 
-        // Nachfolger mit dem grÃ¶ÃŸten Grad
+        // Nachfolger mit dem größten Grad
         // (falls vorhanden; Nullzeiger bei einem Blattknoten).
         Node* child;
 
-        // ZirkulÃ¤re Verkettung aller Nachfolger eines Knotens
+        // Zirkuläre Verkettung aller Nachfolger eines Knotens
         // bzw. einfache Verkettung aller Wurzelknoten einer Halde,
         // jeweils sortiert nach aufsteigendem Grad.
         Node* sibling;
 
         // Initialisierung als Wurzelknoten mit Grad 0 und Eintrag e,
-        // der dann auf diesen Knoten zurÃ¼ckverweist.
+        // der dann auf diesen Knoten zurückverweist.
         Node (Entry* e) : entry(e), degree(0),
                           parent(nullptr), child(nullptr), sibling(nullptr) {
             e->node = this;
@@ -69,38 +69,38 @@ struct BinHeap {
     // Ist die Halde momentan leer?
     bool isEmpty ()
 
-    // GrÃ¶ÃŸe der Halde, d. h. Anzahl momentan gespeicherter EintrÃ¤ge
+    // Größe der Halde, d. h. Anzahl momentan gespeicherter Einträge
     // liefern.
     uint size ()
 
-    // Neuen Eintrag mit PrioritÃ¤t p und zusÃ¤tzlichen Daten d erzeugen,
-    // zur Halde hinzufÃ¼gen und zurÃ¼ckliefern.
+    // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
+    // zur Halde hinzufügen und zurückliefern.
     Entry* insert (P p, D d)
 
-    // Eintrag mit minimaler PrioritÃ¤t liefern.
+    // Eintrag mit minimaler Priorität liefern.
     // (Nullzeiger bei einer leeren Halde.)
     Entry* minimum ()
 
-    // Eintrag mit minimaler PrioritÃ¤t liefern
+    // Eintrag mit minimaler Priorität liefern
     // und aus der Halde entfernen (aber nicht freigeben).
     // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
     Entry* extractMin ()
 
-    // EnthÃ¤lt die Halde den Eintrag e?
+    // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
     bool contains (Entry* e)
 
-    // PrioritÃ¤t des Eintrags e auf p Ã¤ndern.
+    // Priorität des Eintrags e auf p ändern.
     // Hierbei darf auf keinen Fall ein neues Entry-Objekt entstehen,
-    // selbst wenn die Operation intern als Entfernen und Neu-EinfÃ¼gen
+    // selbst wenn die Operation intern als Entfernen und Neu-Einfügen
     // implementiert wird.
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
-    // oder e nicht zur aktuellen Halde gehÃ¶rt; sonst Resultatwert true.)
+    // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool changePrio (Entry* e, P p)
 
     // Eintrag e aus der Halde entfernen (aber nicht freigeben).
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
-    // oder e nicht zur aktuellen Halde gehÃ¶rt; sonst Resultatwert true.)
+    // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool remove (Entry* e)
 
     // Inhalt der Halde zu Testzwecken ausgeben.
