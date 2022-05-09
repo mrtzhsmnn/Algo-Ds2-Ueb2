@@ -27,3 +27,63 @@ https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-
   + bool isEmpty ()
   + uint size ()
   + Entry* insert (P p, D d)
+
+# Überlegungen Zu den Aufgaben 
+## Allgemein: 
+  Es ist gefordert, eine **Minimum-Vorrangwarteschlange** mittels **Binomial-Halden** zu implementieren.
+  **ACHTUNG:** Nicht zu verwechseln mit einer Implementierung mittels ~~binärer~~ Halden!
+  
+## Minimum-Vorrangwarteschlange:
+  Ist eine Datenstruktur, die folgende Operationen möglichst effizient unterstützt:
+  + Einfg. eines Objekts mit bestimmter Priorität
+  + Auslesen und ggf. Entnehmen eines Objekts mit minimaler Priorotät
+  + Nachträgl. Ändern der Priorität eines Objekts
+  + Entf. eines Objekts 
+  + Vereinigen zweier Warteschlangen (geht nur mit binomial heaps)
+  Eine Minimum Vorrangwarteschlange kann durch eine Binomial-Halde implementiert werden.
+
+## Binomial-Halden/-Bäume:
+### BÄUME:
+  Zum Verständnis müssen zunächst **Binomial-Bäume** erklärt werden:
+  Ein Binomial-Baum ist eine Baumstruktur mit folgender Besonderheit:
+  + Ein BB mit Grad k=0 besteht aus einem einzelnen Knoten
+  + Für k>=1 besteht ein BB aus zwei Unterbäumen mit Grad k-1
+  + Dabei ist ein Unterbaum der erste Nachfolger des anderen Unterbaums
+
+Hier von links nach rechts mit Grad 0 bis 3. Bei dem dritten Grad ist dann ersichtlich, dass dieser einen Teilbaum der Größe k=2 links an den Vaterknoten eines k=2 Baumes angehängt hat.
+<br />
+![Binomial-Heap](https://i.ibb.co/BnMkq8Q/Binomial-Tree-0-3.png)
+
+Für jeden Binomial-Baum mit Grad k>=0 gilt:
++ Tiefe des Baums und Grad des Wurzelknotens ist k 
++ Nachfolger des Wurzelknotens sind BB mit Grad k-1,...,0 in dieser Reihenfolge
++ Ein Baum besitzt 2^k Knoten
++ Auf Ebene l mit 0 <= l <= k gibt es genau k über l Knoten.
+### MINIMAL:
+Ein **Minimal**-Binomial-Baum ist also ein Binomialbaum, der die Minimum-Bedingung erfüllt.
+Ein Baum erfüllt die Minimal-Bedingung wenn jeder seiner Knoten, außer die Wurzel, höchstens so groß wie sein Nachfolger ist.
+In der Folge sind alle Knoten eines Teilbaums mindestens so groß wie die Wurzel dieses Teilbaums.
+Also ist die Wurzel des gesamten Baums ein minimales Element des Baums.
+### HALDEN:
+Eine **Minimum-Binomial-Halde** ist eine (endliche) Folge von Minimum-Binomial-Bäumen, deren Grad streng monoton wächst.
+Folgerung:
++ Alle Bäume innerhalb einer Halde sind von unterschiedl. Grad.
++ Eine Binomial-Halde mit N Elementen besteht aus BB mit Grad k1 < ... < kp sodass N die Summe von 2^ki von k1 bis kp ist. Dem folgend sind die Gräder genau die Ziffern in der Binomialdarstellung von N die dort den Wert 1 besitzen.
++ Sowohl die Anzahl der Bäume in einer solchen Halde als auch deren Grad und Tiefe ist jeweils höchstens O(log2 N)
+### IMPLEMENTIERUNG:
+**Knoten eines Baums/Halde:**
++ `degree` Speichert Grad des Knoten
++ `parent` verweist auf Vorgänger. Bei Wurzelknoten = NULL
++ `child` verweist auf Nachfolger. Bei Blatt = NULL
++ `sibling` verkettet Nachfolger eines Knotens in einer nach aufst. Grad sortierten Liste
+     - Der Nachfolger mit dem größten Grad verweist auf den Nachfolger mit dem
+    kleinsten Grad.
+     - Jeder andere Nachfolger verweist auf den Nachfolger mit dem nächstgrößeren
+    Grad.
+     - Wenn es nur einen Nachfolger gibt, verweist er auf sich selbst.
+    Außerdem verkettet `sibling` die Wurzelknoten aller Bäume der Halde in einer
+    nach aufsteigendem Grad sortier ten einfachen Liste, d. h. jeder Wurzelknoten
+    verweist ggf. auf den Wurzelknoten mit dem nächstgrößeren Grad.
++ `entry` verweist auf das Objekt das in dem Knoten gespeichert werden soll
+
+*Zur weiteren Erklärung der gefordertern Implementierungen Siehe [PDF mit Folien](https://github.com/mrtzhsmnn/Algo-Ds2-Ueb2/blob/main/Folien%20zur%20Implementierung.pdf) aus der Vorlesung ab Seite 104.*
