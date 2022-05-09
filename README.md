@@ -13,9 +13,17 @@ Link zur weiteren Erklärung der Keywords am Beginn des Statements.
 https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
 
 ## Aufgabenverteilung:
+**Deadline:** Montag 16.05.2022 (next meeting 15:00 Uhr)
 ### Nico:
-**Deadline:** 
+  + Entry* minimum ()
+  + Entry* extractMin ()
+  + bool contains (Entry* e)
 ### Friedrich:
-**Deadline:** 
+  + bool changePrio (Entry* e, P p)
+  + bool remove (Entry* e)
+  + void dump ()
 ### Moritz:
-**Deadline:** 
+  + BinHeap ()
+  + bool isEmpty ()
+  + uint size ()
+  + Entry* insert (P p, D d)
