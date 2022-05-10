@@ -82,7 +82,7 @@ struct BinHeap {
         Node* n = head;
         // Iteration über die Wurzelliste.
         // Bedingung ist, dass der Grad des Siblings des aktuellen Knotens kleiner als der Grad des aktuellen Knotens ist.
-        while (n->sibling->degree < n->degree){
+        while (n != nullptr){
             // Der Formel aus der Vorlesung folgend (Folie 101):
             s += 2^n->degree;
             // neues n ist sibling.
@@ -101,9 +101,56 @@ struct BinHeap {
         return &entry;
     }
 
-    // HILFSFUNKTION: merge, Vereinigt zwei halden und liefert eine neue halde zurück.
-    Node* merge (Node* a, Node* b){
+    // HILFSFUNKTION: swapnode swappt zwei Knoten.
+    void swapnode(Node* a, Node* b){
+        Node* swap = a;
+        a = b;
+        b = swap;
+    }
+
+    // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
+    Node* treemerge(Node* a, Node* b){
+        // Ist die Priorität des ersten Baumes(a) Größer als die des zweiten Baumes(b)?
+        if (b->entry->prio < a->entry->prio) {
+            // Wenn ja wird a und b getauscht.
+            // Da ja die Priorität von a größer ist muss a teilbaum von b werden.
+            swapnode(a, b);
+        }
+        // Führe nun Merge aus.
+        Node* temp = a->child;
+        a->child = b;
+        b->parent = a;
+        b->sibling = temp;
+        // Degree des neuen Wurzelknotens wird um 1 erhöht.
+        a->degree++;
+        return a;
+    }
+
+    // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
+    Node* heapmerge (Node* a, Node* b){
         return nullptr; // pseudoreturn
+    }
+
+    // HILFSFUNKTION: degrsort, sortiert die Halde nach grad.
+    void degrsort (Node* n){ ///TODO REFINEMENT
+        Node* prev = nullptr;
+        Node* curr = n;
+        Node* next = curr->sibling;
+        while (next != nullptr){
+            if (next->degree < curr->degree){
+                if (prev != nullptr) prev->sibling = next;
+                curr->sibling = next->sibling;
+                next->sibling = curr;
+                prev = nullptr;
+                curr = n;
+                next = curr->sibling;
+            }
+            else {
+                prev = curr;
+                curr = next;
+                next = next->sibling;
+            }
+        }
     }
 
     // Eintrag mit minimaler Priorität liefern.
