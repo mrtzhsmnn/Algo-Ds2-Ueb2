@@ -88,4 +88,4 @@ Folgerung:
     verweist ggf. auf den Wurzelknoten mit dem nächstgrößeren Grad.
 + `entry` verweist auf das Objekt das in dem Knoten gespeichert werden soll
 
-*Zur weiteren Erklärung der gefordertern Implementierungen Siehe [PDF mit Folien](https://github.com/mrtzhsmnn/Algo-Ds2-Ueb2/blob/main/Folien%20zur%20Implementierung.pdf) aus der Vorlesung ab Seite 104.*
+*Zur weiteren Erklärung der gefordertern Implementierungen Siehe [PDF mit Folien](https://github.com/mrtzhsmnn/forthenoobs/blob/main/Folien%20zur%20Implementierung.pdf) aus der Vorlesung ab Seite 104.*
