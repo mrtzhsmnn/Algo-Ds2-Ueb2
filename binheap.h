@@ -172,11 +172,15 @@ struct BinHeap {
 
     // HILFSFUNKTION: degrsort, sortiert die Halde nach grad.
     void degrsort (Node* n){ ///TODO REFINEMENT
+        // Hilfsvariablen.
         Node* prev = nullptr;
         Node* curr = n;
         Node* next = curr->sibling;
+        // durchlaufen von Halde bis letztem sibling.
         while (next != nullptr){
+            // wenn Grad von next kleiner als Grad von curr
             if (next->degree < curr->degree){
+                // Swap.
                 if (prev != nullptr) prev->sibling = next;
                 curr->sibling = next->sibling;
                 next->sibling = curr;
@@ -184,7 +188,7 @@ struct BinHeap {
                 curr = n;
                 next = curr->sibling;
             }
-            else {
+            else { // wenn nicht, dann weitergehen.
                 prev = curr;
                 curr = next;
                 next = next->sibling;
