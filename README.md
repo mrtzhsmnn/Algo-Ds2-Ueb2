@@ -25,10 +25,10 @@ Pls update the checklist with
   - [ ] bool remove (Entry* e)
   - [ ] void dump ()
 ### Moritz:
-  - [ ] BinHeap ()
-  - [ ] bool isEmpty ()
-  - [ ] uint size ()
-  - [ ] Entry* insert (P p, D d)
+  - [x] BinHeap ()
+  - [x] bool isEmpty ()
+  - [x] uint size ()
+  - [x] Entry* insert (P p, D d)
 
 # Überlegungen Zu den Aufgaben 
 ## Allgemein: 
