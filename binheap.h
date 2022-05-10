@@ -64,31 +64,45 @@ struct BinHeap {
     Node* head;
 
     // Initialisierung als leere Halde.
-    BinHeap ()
+    BinHeap (){
+        head = nullptr;
+    }
 
     // Ist die Halde momentan leer?
-    bool isEmpty ()
+    bool isEmpty (){
+        return head == nullptr;
+    }
 
     // Größe der Halde, d. h. Anzahl momentan gespeicherter Einträge
     // liefern.
-    uint size ()
+    uint size (){
+        return 1; // pseudoreturn
+    }
 
     // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
     // zur Halde hinzufügen und zurückliefern.
-    Entry* insert (P p, D d)
+    Entry* insert (P p, D d){
+        return nullptr; // pseudoreturn
+    }
 
     // Eintrag mit minimaler Priorität liefern.
     // (Nullzeiger bei einer leeren Halde.)
-    Entry* minimum ()
+    Entry* minimum (){
+        return nullptr; // pseudoreturn
+    }
 
     // Eintrag mit minimaler Priorität liefern
     // und aus der Halde entfernen (aber nicht freigeben).
     // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
-    Entry* extractMin ()
+    Entry* extractMin (){
+        return nullptr; // pseudoreturn
+    }
 
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
-    bool contains (Entry* e)
+    bool contains (Entry* e){
+        return false; // pseudoreturn
+    }
 
     // Priorität des Eintrags e auf p ändern.
     // Hierbei darf auf keinen Fall ein neues Entry-Objekt entstehen,
@@ -96,13 +110,19 @@ struct BinHeap {
     // implementiert wird.
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
-    bool changePrio (Entry* e, P p)
+    bool changePrio (Entry* e, P p){
+        return false; // pseudoreturn
+    }
 
     // Eintrag e aus der Halde entfernen (aber nicht freigeben).
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
-    bool remove (Entry* e)
+    bool remove (Entry* e){
+        return false; // pseudoreturn
+    }
 
     // Inhalt der Halde zu Testzwecken ausgeben.
-    void dump ()
+    void dump (){
+        // ...
+    }
 };
