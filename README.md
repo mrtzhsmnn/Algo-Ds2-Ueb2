@@ -14,19 +14,21 @@ https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-
 
 ## Aufgabenverteilung:
 **Deadline:** Montag 16.05.2022 (next meeting 15:00 Uhr)
+Pls update the checklist with 
+- [x] `[x]` when done.
 ### Nico:
-  + Entry* minimum ()
-  + Entry* extractMin ()
-  + bool contains (Entry* e)
+  - [ ] Entry* minimum ()
+  - [ ] Entry* extractMin ()
+  - [ ] bool contains (Entry* e)
 ### Friedrich:
-  + bool changePrio (Entry* e, P p)
-  + bool remove (Entry* e)
-  + void dump ()
+  - [ ] bool changePrio (Entry* e, P p)
+  - [ ] bool remove (Entry* e)
+  - [ ] void dump ()
 ### Moritz:
-  + BinHeap ()
-  + bool isEmpty ()
-  + uint size ()
-  + Entry* insert (P p, D d)
+  - [ ] BinHeap ()
+  - [ ] bool isEmpty ()
+  - [ ] uint size ()
+  - [ ] Entry* insert (P p, D d)
 
 # Überlegungen Zu den Aufgaben 
 ## Allgemein: 
