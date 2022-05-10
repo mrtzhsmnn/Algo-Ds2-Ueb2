@@ -94,6 +94,15 @@ struct BinHeap {
     // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
     // zur Halde hinzufügen und zurückliefern.
     Entry* insert (P p, D d){
+        // Neuen Eintrag erzeugen.
+        Entry entry = new Entry(p, d);
+        Node node = new Node(entry);
+        merge(node, head);
+        return &entry;
+    }
+
+    // HILFSFUNKTION: merge, Vereinigt zwei halden und liefert eine neue halde zurück.
+    Node* merge (Node* a, Node* b){
         return nullptr; // pseudoreturn
     }
 
