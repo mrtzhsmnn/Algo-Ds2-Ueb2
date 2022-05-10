@@ -78,12 +78,15 @@ struct BinHeap {
     uint size (){ ///TODO TESTING
         // Var. für das Zählen der Einträge.
         uint s = 0;
+        // Pointer auf den aktuellen Wurzelknoten
+        Node* n = head;
         // Iteration über die Wurzelliste.
-        for (Node* n = head; n != nullptr; n = n->sibling){
-            //Zählen der Einträge in einem Baum.
-            for (Node* c = n->child; c != nullptr; c = c->sibling){
-                s++;
-            }
+        // Bedingung ist, dass der Grad des Siblings des aktuellen Knotens kleiner als der Grad des aktuellen Knotens ist.
+        while (n->sibling->degree < n->degree){
+            // Der Formel aus der Vorlesung folgend (Folie 101):
+            s += 2^n->degree;
+            // neues n ist sibling.
+            n = n->sibling;
         }
         return s;
     }
