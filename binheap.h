@@ -75,8 +75,17 @@ struct BinHeap {
 
     // Größe der Halde, d. h. Anzahl momentan gespeicherter Einträge
     // liefern.
-    uint size (){
-        return 1; // pseudoreturn
+    uint size (){ ///TODO TESTING
+        // Var. für das Zählen der Einträge.
+        uint s = 0;
+        // Iteration über die Wurzelliste.
+        for (Node* n = head; n != nullptr; n = n->sibling){
+            //Zählen der Einträge in einem Baum.
+            for (Node* c = n->child; c != nullptr; c = c->sibling){
+                s++;
+            }
+        }
+        return s;
     }
 
     // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
