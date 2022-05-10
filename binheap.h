@@ -128,7 +128,46 @@ struct BinHeap {
 
     // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
     Node* heapmerge (Node* a, Node* b){
-        return nullptr; // pseudoreturn
+        // Nodepointer als Hilfsvariable. Wertzuweisung mit aktuellem Wurzelknoten von a.
+        Node* curr = nullptr;
+        curr = a;
+        // durchlaufen von a bis letztem sibling.
+        while (curr->sibling != nullptr){
+            curr = curr->sibling;
+        }
+        // Verkettung von a und b.
+        curr->sibling = b;
+        // Sortieren der Halde. a die nun aus a und b vereinigt besteht.
+        degrsort(a);
+        // setze curr auf Wurzelknoten von a.
+        curr = a;
+        // weitere Hilfsvariablen.
+        Node* next = curr->sibling;
+        Node* nextnext = nullptr;
+        Node* prev = nullptr;
+        // durchlaufen von a bis letztem sibling.
+        while (curr->sibling != nullptr){
+            // Wenn Grad zweier Bäume Identisch ist.
+            if (curr->sibling->degree == curr->degree){ // Wenn ja, dann merge.
+                // Hilfsvariablen.
+                nextnext = next->sibling;
+                // Merge.
+                curr = treemerge(curr, next);
+                // Wenn prev null ist, dann ist curr die neue Wurzel.
+                // Ansonsten wird curr zu prevsibling.
+                if (prev != nullptr) prev->sibling = curr;
+                else a = curr;
+                // Sibling von curr wird aktualisiert.
+                curr->sibling = nextnext;
+                // next aktualisieren.
+                next = nextnext;
+            } else { // Nur wenn nicht gemerged wird, wird im Baum weitergegangen.
+                prev = curr;
+                curr = next;
+                next = next->sibling;
+            }
+        }
+        return a;
     }
 
     // HILFSFUNKTION: degrsort, sortiert die Halde nach grad.
