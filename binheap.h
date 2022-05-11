@@ -130,6 +130,8 @@ struct BinHeap {
     Node* heapmerge (Node* a, Node* b){
         // Nodepointer als Hilfsvariable. Wertzuweisung mit aktuellem Wurzelknoten von a.
         Node* curr = nullptr;
+        // Da die kleinere Halde an die größere Halde angehängt werden muss, wird die größe Geprüft.
+        if (a->size() < b->size()) swapnode(a, b); // falls der Fall wird a und b getauscht.
         curr = a;
         // durchlaufen von a bis letztem sibling.
         while (curr->sibling != nullptr){
