@@ -105,5 +105,8 @@ Entsprechend wird dann dem Wurzelknoten des Baumes mit der niedrigeren Prioritä
 #### HeapMerge:
 Bei einem Merge zweier **Halden** wir einfach die kleinere Halde an die größere angehängt.
 Dann wird mit degrsort die Wurzelknoten nach aufsteigendem Grad sortiert. Sodass monoton steigender Grad.
-Nun kann mit jedem Baumpaar mit gleichem Grad TreeMerge ausgeführt werden. 
+Nun kann mit jedem Baumpaar mit gleichem Grad TreeMerge ausgeführt werden.
+
+<br /> 
+
 *Zur weiteren Erklärung der gefordertern Implementierungen Siehe [PDF mit Folien](https://github.com/mrtzhsmnn/Algo-Ds2-Ueb2/blob/main/Folien%20zur%20Implementierung.pdf) aus der Vorlesung ab Seite 104.*
