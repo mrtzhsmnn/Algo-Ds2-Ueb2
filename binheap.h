@@ -97,7 +97,7 @@ struct BinHeap {
         // Neuen Eintrag erzeugen.
         Entry entry = new Entry(p, d);
         Node node = new Node(entry);
-        merge(node, head);
+        heapmerge(head, node);
         return &entry;
     }
 
@@ -121,6 +121,10 @@ struct BinHeap {
         a->child = b;
         b->parent = a;
         b->sibling = temp;
+        while (temp->degree!=0){
+            temp = temp->sibling;
+        }
+        temp->sibling = b;
         // Degree des neuen Wurzelknotens wird um 1 erhöht.
         a->degree++;
         return a;
