@@ -73,8 +73,18 @@ Folgerung:
 + Eine Binomial-Halde mit N Elementen besteht aus BB mit Grad k1 < ... < kp sodass N die Summe von 2^ki von k1 bis kp ist. Dem folgend sind die Gräder genau die Ziffern in der Binomialdarstellung von N die dort den Wert 1 besitzen.
 + Sowohl die Anzahl der Bäume in einer solchen Halde als auch deren Grad und Tiefe ist jeweils höchstens O(log2 N)
 ### IMPLEMENTIERUNG:
-**Knoten eines Baums/Halde:**
-+ `degree` Speichert Grad des Knoten
+#### Allgemein: 
+Es wird eine Struktur an Binomial-Bäumen angelegt, bei welchen alle Wurzelknoten mit .sibling auf den nächsten Wurzelknoten verweisen.
+Diese sich ergebende liste ist endlich und nicht zirkulär, allerdings nach grad der Bäume aufsteigend sortiert.
+
+Das Child eines Wurzelknotens ist der Nachfolger (also nicht sibling) mit dem größten Grad. Das Child wiederum verweist in einer zirkulären Liste auf den Knoten der selben Ebene mit dem nächstniedrigen Grad.
+Jeder Knoten außer den Wurzelknoten verweist mit dem Parent-Zeiger auf den Vorgängerknoten. Also verweist ein Wurzelknoten von einem Baum Grad 2 beispielsweise zwar nur auf den linken Kindknoten mit child.
+Da dieser einen höheren Grad hat als der rechte, allerdings verweist der Linke Kindknoten auf den rechten Kindknoten mit sibling, und der rechte zirkulär auf den linken mit sibling.
+Außerdem verweisen beide mit parent auf den Wurzelknoten.
+<br /> 
+
+#### Knoten eines Baums/Halde:
++ `degree` Speichert Grad des Knotens
 + `parent` verweist auf Vorgänger. Bei Wurzelknoten = NULL
 + `child` verweist auf Nachfolger. Bei Blatt = NULL
 + `sibling` verkettet Nachfolger eines Knotens in einer nach aufst. Grad sortierten Liste
@@ -88,4 +98,12 @@ Folgerung:
     verweist ggf. auf den Wurzelknoten mit dem nächstgrößeren Grad.
 + `entry` verweist auf das Objekt das in dem Knoten gespeichert werden soll
 
+#### TreeMerge:
+Bei einem Merge zweier **Bäume** wird überprüft welcher Baum den minimalen Prioritätswert am Wurzelknoten hat. Um beim Merge die Minimal-Bedingung zu erhalten.
+Entsprechend wird dann dem Wurzelknoten des Baumes mit der niedrigeren Priorität der Wurzelknoten des baumes mit der höheren Priorität als Sibling zugeordnet.
+
+#### HeapMerge:
+Bei einem Merge zweier **Halden** wir einfach die kleinere Halde an die größere angehängt.
+Dann wird mit degrsort die Wurzelknoten nach aufsteigendem Grad sortiert. Sodass monoton steigender Grad.
+Nun kann mit jedem Baumpaar mit gleichem Grad TreeMerge ausgeführt werden. 
 *Zur weiteren Erklärung der gefordertern Implementierungen Siehe [PDF mit Folien](https://github.com/mrtzhsmnn/Algo-Ds2-Ueb2/blob/main/Folien%20zur%20Implementierung.pdf) aus der Vorlesung ab Seite 104.*
