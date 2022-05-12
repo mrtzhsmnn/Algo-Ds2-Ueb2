@@ -220,7 +220,7 @@ struct BinHeap {
     // Eintrag mit minimaler Priorität liefern
     // und aus der Halde entfernen (aber nicht freigeben).
     // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
-    Entry* extractMin (){
+    Entry* extractMin (){ ///TODO REFINEMENT
         if(isEmpty()) return nullptr; //wenn Halde leer ist
         else{ //wenn Halde nicht leer ist
             Node a=minimum(); //minimum wird gesucht und in a gespeichert!
