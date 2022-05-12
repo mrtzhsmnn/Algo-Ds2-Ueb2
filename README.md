@@ -17,9 +17,9 @@ https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-
 Pls update the checklist with 
 - [x] `[x]` when done.
 ### Nico:
-  - [ ] Entry* minimum ()
-  - [ ] Entry* extractMin ()
-  - [ ] bool contains (Entry* e)
+  - [x] Entry* minimum ()
+  - [x] Entry* extractMin ()
+  - [x] bool contains (Entry* e)
 ### Friedrich:
   - [ ] bool changePrio (Entry* e, P p)
   - [ ] bool remove (Entry* e)

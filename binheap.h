@@ -205,20 +205,46 @@ struct BinHeap {
     // Eintrag mit minimaler Priorität liefern.
     // (Nullzeiger bei einer leeren Halde.)
     Entry* minimum (){
-        return nullptr; // pseudoreturn
+        if(isEmpty()) return nullptr; // falls leer, dann nullptr zurückgeben.
+        else { // sonst, dann den Eintrag mit minimaler Priorität suchen und zurückgeben.
+            Node *n = head;
+            Node n_mem = nullptr;
+            while(n != nullptr){ // durchlaufen der Halde.
+                if(n->prio < n_mem->prio || n_mem == nullptr) n_mem = n; // wenn Priorität kleiner, dann n_mem aktualisieren. Beim ersten Durchlauf ist n_mem null, und der if Block wird auf jeden Fall ausgeführt.
+                n = n->sibling; // n auf nächsten sibling setzen.
+            }
+            return n_mem;
+        }
     }
 
     // Eintrag mit minimaler Priorität liefern
     // und aus der Halde entfernen (aber nicht freigeben).
     // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
     Entry* extractMin (){
-        return nullptr; // pseudoreturn
+        if(isEmpty()) return nullptr; //wenn Halde leer ist
+        else{ //wenn Halde nicht leer ist
+            Node a=minimum(); //minimum wird gesucht und in a gespeichert!
+            Node a_mem = a; //a_mem ist der Node, der mit dem minimum gesucht wurde.
+            a.remove(); //a wird aus der Halde entfernt
+            if(a->child != nullptr){ //wenn a ein Nachfolger hat!
+                heapmerge(a->parent, a->child); //wenn a nur ein Kind hat, dann wird aus der Halde entfernt.
+            }
+            return a_mem; //a_mem wird zurückgegeben
+        }
     }
 
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
     bool contains (Entry* e){
-        return false; // pseudoreturn
+        if(e == nullptr) return false; //ist e ein Nullzeiger?
+        else{ //sonst
+            Node *n = head; //n wird auf head gesetzt
+            while(n != nullptr){ //solange n nicht null ist
+                if(n->data == e->data) return true; //wenn der Eintrag e gefunden wurde!
+                n = n->sibling; //n wird auf nächsten sibling gesetzt
+            }
+            return false; //wenn Eintrag e nicht gefunden wurde
+        }
     }
 
     // Priorität des Eintrags e auf p ändern.
