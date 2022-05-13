@@ -107,6 +107,30 @@ struct BinHeap {
         a = b;
         b = swap;
     }
+    // HILFSFUNKTION: treecount Gibt die anzahl der Bäume in der Halde zurück.
+    uint treecount(Node* a){
+        uint count = 0;
+        Node* n = a;
+        while (n != nullptr){
+            count++;
+            n = n->sibling;
+        }
+        return count;
+    }
+
+    // HILFSFUNKTION: treeinsert, fügt einen Baum am Ende der Halde ein.
+    void treeinsert(Node* a, Node* b){
+        if (a == nullptr){
+            a = b;
+        }
+        else{
+            Node* n = a;
+            while (n->sibling != nullptr){
+                n = n->sibling;
+            }
+            n->sibling = b;
+        }
+    }
 
     // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
     Node* treemerge(Node* a, Node* b){
@@ -132,74 +156,55 @@ struct BinHeap {
 
     // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
     Node* heapmerge (Node* a, Node* b){
-        // Nodepointer als Hilfsvariable. Wertzuweisung mit aktuellem Wurzelknoten von a.
-        Node* curr = nullptr;
-        // Da die kleinere Halde an die größere Halde angehängt werden muss, wird die größe Geprüft.
-        if (a->size() < b->size()) swapnode(a, b); // falls der Fall wird a und b getauscht.
-        curr = a;
-        // durchlaufen von a bis letztem sibling.
-        while (curr->sibling != nullptr){
-            curr = curr->sibling;
-        }
-        // Verkettung von a und b.
-        curr->sibling = b;
-        // Sortieren der Halde. a die nun aus a und b vereinigt besteht.
-        degrsort(a);
-        // setze curr auf Wurzelknoten von a.
-        curr = a;
-        // weitere Hilfsvariablen.
-        Node* next = curr->sibling;
-        Node* nextnext = nullptr;
-        Node* prev = nullptr;
-        // durchlaufen von a bis letztem sibling.
-        while (curr->sibling != nullptr){
-            // Wenn Grad zweier Bäume Identisch ist.
-            if (curr->sibling->degree == curr->degree){ // Wenn ja, dann merge.
-                // Hilfsvariablen.
-                nextnext = next->sibling;
-                // Merge.
-                curr = treemerge(curr, next);
-                // Wenn prev null ist, dann ist curr die neue Wurzel.
-                // Ansonsten wird curr zu prevsibling.
-                if (prev != nullptr) prev->sibling = curr;
-                else a = curr;
-                // Sibling von curr wird aktualisiert.
-                curr->sibling = nextnext;
-                // next aktualisieren.
-                next = nextnext;
-            } else { // Nur wenn nicht gemerged wird, wird im Baum weitergegangen.
-                prev = curr;
-                curr = next;
-                next = next->sibling;
+        //Hilfvariablen
+        Node* temp = nullptr;
+        Node* c = nullptr;
+        uint k = 0;
+        // Solange a und b nicht leer sind.
+        while (a!=nullptr || b!=nullptr){
+            // Ist a leer? (prüfen wegen fehler sonst mit degree)
+            if (a!=nullptr) {
+                // degree ist k?
+                if (a->degree == k) {
+                    // Wenn ja a an temp anhängen.
+                    treeinsert(temp, a);
+                    // a iterieren.
+                    a = a->sibling;
+                }
             }
-        }
-        return a;
-    }
-
-    // HILFSFUNKTION: degrsort, sortiert die Halde nach grad.
-    void degrsort (Node* n){ ///TODO REFINEMENT
-        // Hilfsvariablen.
-        Node* prev = nullptr;
-        Node* curr = n;
-        Node* next = curr->sibling;
-        // durchlaufen von Halde bis letztem sibling.
-        while (next != nullptr){
-            // wenn Grad von next kleiner als Grad von curr
-            if (next->degree < curr->degree){
-                // Swap.
-                if (prev != nullptr) prev->sibling = next;
-                curr->sibling = next->sibling;
-                next->sibling = curr;
-                prev = nullptr;
-                curr = n;
-                next = curr->sibling;
+            // Ist b leer? (prüfen wegen fehler sonst mit degree)
+            if (b!=nullptr) {
+                // degree ist k?
+                if (b->degree == k) {
+                    // Wenn ja b an temp anhängen.
+                    treeinsert(temp, b);
+                    // b iterieren.
+                    b = b->sibling;
+                }
             }
-            else { // wenn nicht, dann weitergehen.
-                prev = curr;
-                curr = next;
-                next = next->sibling;
+            // Zahl der Bäume in Temp == 1?
+            if (treecount(temp) == 1) {
+                // Wenn ja, dann temp an c anhängen.
+                treeinsert(c, temp);
+                // temp leeren.
+                temp = nullptr;
             }
+            // Zahl der Bäume in Temp == 3?
+            if (treecount(temp) == 3) {
+                // Wenn ja, dann dritten Baum in Temp an c anhängen.
+                treeinsert(c, temp->sibling->sibling);
+                // Dritter Baum in Temp löschen.
+                temp->sibling->sibling = nullptr;
+            }
+            // Zahl der Bäume in Temp == 2?
+            if (treecount(temp) == 2) {
+                // Wenn ja, dann Beide Bäume Mergen
+                temp = treemerge(temp, temp->sibling);
+            }
+            // k um 1 erhöhen.
+            k++;
         }
+        return c;
     }
 
     // Eintrag mit minimaler Priorität liefern.
