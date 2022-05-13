@@ -214,9 +214,11 @@ struct BinHeap {
         else { // sonst, dann den Eintrag mit minimaler Priorität suchen und zurückgeben.
             Node *n = head;
             Node n_mem = nullptr;
-            while(n != nullptr){ // durchlaufen der Halde.
-                if(n->prio < n_mem->prio || n_mem == nullptr) n_mem = n; // wenn Priorität kleiner, dann n_mem aktualisieren. Beim ersten Durchlauf ist n_mem null, und der if Block wird auf jeden Fall ausgeführt.
-                n = n->sibling; // n auf nächsten sibling setzen.
+            while (n != nullptr){
+                if(n[0] < n_mem[0] || n_mem == nullptr){
+                    n_mem = n;
+                }
+                n=n->sibling;
             }
             return n_mem;
         }
@@ -228,13 +230,15 @@ struct BinHeap {
     Entry* extractMin (){ ///TODO REFINEMENT
         if(isEmpty()) return nullptr; //wenn Halde leer ist
         else{ //wenn Halde nicht leer ist
-            Node a=minimum(); //minimum wird gesucht und in a gespeichert!
-            Node a_mem = a; //a_mem ist der Node, der mit dem minimum gesucht wurde.
-            a.remove(); //a wird aus der Halde entfernt
-            if(a->child != nullptr){ //wenn a ein Nachfolger hat!
-                heapmerge(a->parent, a->child); //wenn a nur ein Kind hat, dann wird aus der Halde entfernt.
+            Node min=minimum(); //minimum wird gesucht und in min gespeichert!
+            Node min_mem=min; //min_mem merkt sich min (um min zu löschen)
+            Node min_parent=min->parent; //min_parent ist der parent von min.
+            Node min_child=min->child; //min_child ist der child von min.
+            min.remove(); //min wird aus der Halde entfernt
+            if(min_child != nullptr){ //wenn a ein Nachfolger hatte
+                heapmerge(min_parent, min_child); //wenn a nur ein Kind hat, dann wird aus der Halde entfernt.
             }
-            return a_mem; //a_mem wird zurückgegeben
+            return min_mem; //a_mem wird zurückgegeben
         }
     }
 
@@ -245,7 +249,9 @@ struct BinHeap {
         else{ //sonst
             Node *n = head; //n wird auf head gesetzt
             while(n != nullptr){ //solange n nicht null ist
-                if(n->data == e->data) return true; //wenn der Eintrag e gefunden wurde!
+                for (int i = 0; i < sizeof* n; i++) { //für alle elemente von n
+                    if(n[i]->data == e->data) return true; //wenn der Eintrag e gefunden wurde!
+                }
                 n = n->sibling; //n wird auf nächsten sibling gesetzt
             }
             return false; //wenn Eintrag e nicht gefunden wurde
