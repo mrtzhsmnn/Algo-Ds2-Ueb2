@@ -265,18 +265,64 @@ struct BinHeap {
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool changePrio (Entry* e, P p){
-        return false; // pseudoreturn
+        if(e == nullptr || !(contains(e))){ //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
+            return false; //wenn nicht, dann false zurückgeben
+        }
+        //Ansonsten Priorität ändern
+        else {
+            // Setze die Priorität des Objekts auf die neue Priorität
+            e->prio = p;
+            //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
+            if(e->prio <= e->parent->prio){
+                //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
+                while(e->prio <= e->parent->prio) {
+                    //Vertausche das Objekt mit seinem Vorgänger
+                    swap(e, e->parent);
+                }
+            }
+            //Sofern sich das Objekt nicht in einem Blattknoten befindet
+            else if(e->parent->child != nullptr){
+                //Entferne das Objekt
+                e->remove();
+                //Füge das Objekt mit der neuen Priorität wieder ein
+                //TODO: Objekt einfügen
+            }
+            //true zurückgeben
+            return true;
+        }
     }
 
     // Eintrag e aus der Halde entfernen (aber nicht freigeben).
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool remove (Entry* e){
-        return false; // pseudoreturn
+        if(e != nullptr || !(contains(e))){
+            return false;
+        }
+        else {
+            //entnimm das Objekt mit minimaler Priorität
+            Entry *min = extractMin(e);
+            //Wenn das entnommende Objekt nicht das zu entfernde Objekt ist
+            if (min != e) {
+                //Ändere die Priorität des Objekts auf die Priorität des entnommenen Objekts
+                min->prio = e->prio;
+                //TODO: Verbinde das entnommene Objekt mit dem Knoten des zu entfernenden Objekts
+
+                //Setze die Priorität des zu entfernden Objekts wieder auf ihren ursprünglichen Wert
+                e->prio = e->parent->prio;
+
+
+                return true;
+            }
+        }
     }
 
     // Inhalt der Halde zu Testzwecken ausgeben.
     void dump (){
-        // ...
+        //TODO: Ausgabe, Testen ob Halde leer ist
+        // Inhalt der Halde ausgeben
+
+
+
     }
 };
