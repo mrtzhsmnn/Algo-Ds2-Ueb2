@@ -213,14 +213,14 @@ struct BinHeap {
         if(isEmpty()) return nullptr; // falls leer, dann nullptr zurückgeben.
         else { // sonst, dann den Eintrag mit minimaler Priorität suchen und zurückgeben.
             Node *n = head;
-            Node n_mem = nullptr;
+            Node *n_mem = nullptr;
             while (n != nullptr){
-                if(n[0] < n_mem[0] || n_mem == nullptr){
+                if(n->entry->prio < n_mem->entry->prio || n_mem == nullptr){
                     n_mem = n;
                 }
                 n=n->sibling;
             }
-            return n_mem;
+            return n_mem->entry;
         }
     }
 
@@ -230,15 +230,22 @@ struct BinHeap {
     Entry* extractMin (){ ///TODO REFINEMENT
         if(isEmpty()) return nullptr; //wenn Halde leer ist
         else{ //wenn Halde nicht leer ist
-            Node min=minimum(); //minimum wird gesucht und in min gespeichert!
-            Node min_mem=min; //min_mem merkt sich min (um min zu löschen)
-            Node min_parent=min->parent; //min_parent ist der parent von min.
-            Node min_child=min->child; //min_child ist der child von min.
-            min.remove(); //min wird aus der Halde entfernt
-            if(min_child != nullptr){ //wenn a ein Nachfolger hatte
-                heapmerge(min_parent, min_child); //wenn a nur ein Kind hat, dann wird aus der Halde entfernt.
+            Node *min=minimum(); //minimum wird gesucht und in min gespeichert!
+            Node *min_mem=min; //min_mem merkt sich min (um min zu löschen)
+            Node *min_child=min->child; //min_child ist der child von min.
+            min->remove(); //min wird aus der Halde entfernt
+            Node* temp=nullptr; //temp ist ein leeres Baum
+            temp=head; //temp wird head gespeichert
+            while(temp->sibling!=min_mem){
+                temp=temp->sibling;
             }
-            return min_mem; //a_mem wird zurückgegeben
+            temp->sibling=min_mem->sibling; //temp wird mit min_mem->sibling verbunden
+            if(min_child != nullptr){ //wenn a ein Nachfolger hatte
+                Node* x= min_mem->child->sibling; //x ist der Nachfolger von min_mem
+                min_mem->child->sibling=nullptr; //min_mem->child->sibling wird auf null gesetzt
+                head=heapmerge(x,head); //x wird mit head verbunden
+            }
+            return *min_mem->entry; //min_mem wird zurückgegeben
         }
     }
 
@@ -249,14 +256,25 @@ struct BinHeap {
         else{ //sonst
             Node *n = head; //n wird auf head gesetzt
             while(n != nullptr){ //solange n nicht null ist
-                for (int i = 0; i < sizeof* n; i++) { //für alle elemente von n
-                    if(n[i]->data == e->data) return true; //wenn der Eintrag e gefunden wurde!
+                    if(e->prio < n->prio){ //wenn e kleiner als n ist
+                        n=n->sibling; //n wird auf nächsten Nachfolger gesetzt
+                    }
+                    if(e->data == n->data){ //wenn e gleich n ist
+                        return true; //e ist in der Halde
+                    }
+                    if(e->data > n->data){ //wenn e größer als n ist
+                        n=n->child; //n wird auf nächstes Kind gesetzt
+                        if(n->data == e->data){ //wenn n gleich e ist
+                            return true; //e ist in der Halde
+                        }
+                    }
+
                 }
                 n = n->sibling; //n wird auf nächsten sibling gesetzt
             }
             return false; //wenn Eintrag e nicht gefunden wurde
         }
-    }
+
 
     // Priorität des Eintrags e auf p ändern.
     // Hierbei darf auf keinen Fall ein neues Entry-Objekt entstehen,
