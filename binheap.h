@@ -255,22 +255,19 @@ struct BinHeap {
         if(e == nullptr) return false; //ist e ein Nullzeiger?
         else{ //sonst
             Node *n = head; //n wird auf head gesetzt
+            Node *n_mem = n; //n_mem wird auf n gesetzt
             while(n != nullptr){ //solange n nicht null ist
                     if(e->prio < n->prio){ //wenn e kleiner als n ist
                         n=n->sibling; //n wird auf nächsten Nachfolger gesetzt
                     }
+                    if(n == n_mem){
+                        n=n->child; //n wird auf nächstes Kind gesetzt
+                        n_mem=n; //n_mem wird auf n gesetzt
+                    }
                     if(e->data == n->data){ //wenn e gleich n ist
                         return true; //e ist in der Halde
                     }
-                    if(e->data > n->data){ //wenn e größer als n ist
-                        n=n->child; //n wird auf nächstes Kind gesetzt
-                        if(n->data == e->data){ //wenn n gleich e ist
-                            return true; //e ist in der Halde
-                        }
-                    }
-
                 }
-                n = n->sibling; //n wird auf nächsten sibling gesetzt
             }
             return false; //wenn Eintrag e nicht gefunden wurde
         }
