@@ -161,7 +161,7 @@ struct BinHeap {
         Node* c = nullptr;
         uint k = 0;
         // Solange a und b nicht leer sind.
-        while (a!=nullptr || b!=nullptr){
+        while (a!=nullptr || b!=nullptr||temp!=nullptr){
             // Ist a leer? (prüfen wegen fehler sonst mit degree)
             if (a!=nullptr) {
                 // degree ist k?
@@ -309,15 +309,17 @@ struct BinHeap {
         }
         else {
             //Entnimm das Objekt mit minimaler Priorität
-            Entry *min = extractMin(e);
+            Entry* min = extractMin();
+            P temp = e->prio;
             //Wenn das entnommene Objekt nicht das zu entfernende Objekt ist
             if (min != e) {
                 //Ändere die Priorität des Objekts auf die Priorität des entnommenen Objekts
-                min->prio = e->prio;
+                e->prio = min->prio;
                 //Verbinde das entnommene Objekt mit dem Knoten des zu entfernenden Objekts
-                //TODO: pls help @Moritz @Nico
+                min->node = e->node;
+                min->node->entry = min;
                 //Setze die Priorität des zu entfernenden Objekts wieder auf ihren ursprünglichen Wert
-                e->prio = e->parent->prio;
+                e->prio = temp;
             }
             return true;
         }

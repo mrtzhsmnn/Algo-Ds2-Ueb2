@@ -33,7 +33,7 @@ Pls update the checklist with
 # Überlegungen Zu den Aufgaben 
 ## Allgemein: 
   Es ist gefordert, eine **Minimum-Vorrangwarteschlange** mittels **Binomial-Halden** zu implementieren.
-  **ACHTUNG:** Nicht zu verwechseln mit einer Implementierung mittels ~~binärer~~ Halden!
+  **ACHTUNG:** Nicht zu verwechseln mit einer Implementierung mittels **binärer** Halden!
   
 ## Minimum-Vorrangwarteschlange:
   Ist eine Datenstruktur, die folgende Operationen möglichst effizient unterstützt:
