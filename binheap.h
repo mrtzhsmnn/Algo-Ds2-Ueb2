@@ -288,19 +288,19 @@ struct BinHeap {
             // Setze die Priorität des Objekts auf die neue Priorität
             e->prio = p;
             //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
-            if(e->prio <= e->parent->prio){
+            if(p <= e->parent->prio){
                 //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
-                while(e->prio <= e->parent->prio) {
+                while(p <= e->parent->prio) {
                     //Vertausche das Objekt mit seinem Vorgänger
                     swap(e, e->parent);
                 }
             }
             //Sofern sich das Objekt nicht in einem Blattknoten befindet
-            else if(e->parent->child != nullptr){
+            else if(p->child != nullptr){
                 //Entferne das Objekt
                 e->remove();
                 //Füge das Objekt mit der neuen Priorität wieder ein
-                //TODO: Objekt einfügen insert()
+                insert(e, p);
             }
             //true zurückgeben
             return true;
@@ -315,20 +315,18 @@ struct BinHeap {
             return false;
         }
         else {
-            //entnimm das Objekt mit minimaler Priorität
-            Entry min = extractMin(e);
+            //Entnimm das Objekt mit minimaler Priorität
+            Entry *min = extractMin(e);
             //Wenn das entnommene Objekt nicht das zu entfernende Objekt ist
             if (min != e) {
                 //Ändere die Priorität des Objekts auf die Priorität des entnommenen Objekts
                 min->prio = e->prio;
-                //TODO: Verbinde das entnommene Objekt mit dem Knoten des zu entfernenden Objekts
-
+                //Verbinde das entnommene Objekt mit dem Knoten des zu entfernenden Objekts
+                //TODO: pls help @Moritz @Nico
                 //Setze die Priorität des zu entfernenden Objekts wieder auf ihren ursprünglichen Wert
                 e->prio = e->parent->prio;
-
-
-                return true;
             }
+            return true;
         }
     }
 
