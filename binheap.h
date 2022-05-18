@@ -265,7 +265,13 @@ struct BinHeap {
         }
     }
 
-
+    // HILSFUNKTION: vertauscht zwei entry Objekte
+    void swapEntry(Entry* a, Entry* b){
+        Entry* tempa = a;
+        Entry* tempb = b;
+        a = tempb;
+        b = tempa;
+    }
     // Priorität des Eintrags e auf p ändern.
     // Hierbei darf auf keinen Fall ein neues Entry-Objekt entstehen,
     // selbst wenn die Operation intern als Entfernen und Neu-Einfügen
@@ -273,6 +279,7 @@ struct BinHeap {
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool changePrio (Entry* e, P p){
+        P oldprio = e->prio;
         if(e == nullptr || !(contains(e))){ //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
             return false; //wenn nicht, dann false zurückgeben
         }
@@ -281,19 +288,20 @@ struct BinHeap {
             // Setze die Priorität des Objekts auf die neue Priorität
             e->prio = p;
             //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
-            if(p <= e->parent->prio){
+            //TODO: Auf "gleich" prüfen ohne "="-Operator zu nutzen
+            if(p < oldprio){
                 //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
-                while(p <= e->parent->prio) {
+                while(p < oldprio) {
                     //Vertausche das Objekt mit seinem Vorgänger
-                    swap(e, e->parent);
+                    swapEntry(e, e->parent);
                 }
             }
             //Sofern sich das Objekt nicht in einem Blattknoten befindet
-            else if(p->child != nullptr){
+            else if(e->child != nullptr){
                 //Entferne das Objekt
                 e->remove();
                 //Füge das Objekt mit der neuen Priorität wieder ein
-                insert(e, p);
+                insert(p,e);
             }
             //true zurückgeben
             return true;
@@ -332,7 +340,7 @@ struct BinHeap {
         {
             //TODO: Zeilenumbruch nach jedem Tree, how?
             //Inhalt des Baums ausgeben
-            cout << n->entry->prio << " " << n->data << endl;
+            cout << n->entry->prio << " " << n->entry->data << endl;
             //Aufruf mit Child von n
             printTree(n->child);
             //Setze n auf den nächsten Sibling
