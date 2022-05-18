@@ -338,10 +338,10 @@ struct BinHeap {
     {
         while (n)
         {
-            //TODO: Zeilenumbruch nach jedem Tree, how?
             //Inhalt des Baums ausgeben
             cout << n->entry->prio << " " << n->entry->data << endl;
             //Aufruf mit Child von n
+            //Print indentation for every recursion of printTree
             printTree(n->child);
             //Setze n auf den nächsten Sibling
             n = n->sibling;
@@ -353,6 +353,7 @@ struct BinHeap {
         // Inhalt der Halde ausgeben
         Node *i = head;
         while(i != size()){
+            cout << " ";
             printTree(*i);
             i++;
         }
