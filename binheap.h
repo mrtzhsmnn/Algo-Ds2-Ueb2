@@ -335,6 +335,7 @@ struct BinHeap {
     {
         while (n)
         {
+            //TODO: Zeilenumbruch nach jedem Tree, how?
             //Inhalt des Baums ausgeben
             cout << n->entry->prio << " " << n->data << endl;
             //Aufruf mit Child von n
