@@ -300,7 +300,7 @@ struct BinHeap {
                 //Entferne das Objekt
                 e->remove();
                 //Füge das Objekt mit der neuen Priorität wieder ein
-                //TODO: Objekt einfügen
+                //TODO: Objekt einfügen insert()
             }
             //true zurückgeben
             return true;
@@ -316,14 +316,14 @@ struct BinHeap {
         }
         else {
             //entnimm das Objekt mit minimaler Priorität
-            Entry *min = extractMin(e);
-            //Wenn das entnommende Objekt nicht das zu entfernde Objekt ist
+            Entry min = extractMin(e);
+            //Wenn das entnommene Objekt nicht das zu entfernende Objekt ist
             if (min != e) {
                 //Ändere die Priorität des Objekts auf die Priorität des entnommenen Objekts
                 min->prio = e->prio;
                 //TODO: Verbinde das entnommene Objekt mit dem Knoten des zu entfernenden Objekts
 
-                //Setze die Priorität des zu entfernden Objekts wieder auf ihren ursprünglichen Wert
+                //Setze die Priorität des zu entfernenden Objekts wieder auf ihren ursprünglichen Wert
                 e->prio = e->parent->prio;
 
 
@@ -332,12 +332,28 @@ struct BinHeap {
         }
     }
 
+    // HILFSFUNKTION: Baum ausgeben
+    void printTree(Node *n)
+    {
+        while (n)
+        {
+            //Inhalt des Baums ausgeben
+            cout << n->entry->prio << " " << n->data << endl;
+            //Aufruf mit Child von n
+            printTree(n->child);
+            //Setze n auf den nächsten Sibling
+            n = n->sibling;
+        }
+    }
+
     // Inhalt der Halde zu Testzwecken ausgeben.
     void dump (){
-        //TODO: Ausgabe, Testen ob Halde leer ist
         // Inhalt der Halde ausgeben
-
-
-
+        Node *i = head;
+        while(i != size()){
+            printTree(*i);
+            i++;
+        }
     }
+
 };
