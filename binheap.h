@@ -95,8 +95,8 @@ struct BinHeap {
     // zur Halde hinzufügen und zurückliefern.
     Entry* insert (P p, D d){
         // Neuen Eintrag erzeugen.
-        Entry entry = new Entry(p, d);
-        Node node = new Node(entry);
+        Entry* entry = new Entry(p, d);
+        Node* node = new Node(entry);
         heapmerge(head, node);
         return entry;
     }
@@ -245,7 +245,7 @@ struct BinHeap {
                 min_mem->child->sibling=nullptr; //min_mem->child->sibling wird auf null gesetzt
                 head=heapmerge(x,head); //x wird mit head verbunden
             }
-            return *min_mem->entry; //min_mem wird zurückgegeben
+            return min_mem->entry; //min_mem wird zurückgegeben
         }
     }
 
@@ -298,9 +298,9 @@ struct BinHeap {
             //Sofern sich das Objekt nicht in einem Blattknoten befindet
             else if (n->child->entry != nullptr){
                 //Entferne das Objekt
-                e->remove();
+                remove(e);
                 //Füge das Objekt mit der neuen Priorität wieder ein
-                insert(p,e);
+                insert(p,e->data);
             }
             //true zurückgeben
             return true;
