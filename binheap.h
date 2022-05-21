@@ -98,7 +98,7 @@ struct BinHeap {
         Entry entry = new Entry(p, d);
         Node node = new Node(entry);
         heapmerge(head, node);
-        return &entry;
+        return entry;
     }
 
     // HILFSFUNKTION: swapnode swappt zwei Knoten.
@@ -349,10 +349,11 @@ struct BinHeap {
     // Inhalt der Halde zu Testzwecken ausgeben.
     void dump (){
         // Inhalt der Halde ausgeben
-        Node *i = head;
+        Node *n = head;
+        int i = 0;
         while(i != size()){
             cout << " ";
-            printTree(*i);
+            //printTree(*n);
             i++;
         }
     }
