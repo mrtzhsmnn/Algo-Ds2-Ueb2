@@ -273,6 +273,8 @@ struct BinHeap {
             Node *n = head;
             Node *n_mem = nullptr;
             while (n != nullptr){
+                //FIXME: Ausgabe nach fix wieder entfernen
+                cout << "minimum() while Schleife" << endl;
                 if(n->entry->prio < n_mem->entry->prio || n_mem == nullptr){
                     n_mem = n;
                 }
@@ -285,9 +287,13 @@ struct BinHeap {
     // Eintrag mit minimaler Priorität liefern
     // und aus der Halde entfernen (aber nicht freigeben).
     // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
-    Entry* extractMin (){ ///TODO REFINEMENT
+    Entry* extractMin (){
+        //FIXME: Ausgabe nach fix wieder entfernen
+        cout << "extractMin() Beginn der Funktion" << endl;
         if(isEmpty()) return nullptr; //wenn Halde leer ist
         else{ //wenn Halde nicht leer ist
+            //FIXME: Ausgabe nach fix wieder entfernen
+            cout << "extractMin() Halde ist nicht leer" << endl;
             Node* min = minimum()->node; //minimum wird gesucht und in min gespeichert!
             Node* min_mem = min; //min_mem merkt sich min (um min zu löschen)
             Node* min_child = min->child; //min_child ist der child von min.
@@ -295,10 +301,14 @@ struct BinHeap {
             Node* temp = nullptr; //temp ist ein leerer Baum
             temp = head; //in temp wird head gespeichert
             while(temp->sibling!=min_mem){
+                //FIXME: Ausgabe nach fix wieder entfernen
+                cout << "extractMin() while Schleife" << endl;
                 temp=temp->sibling;
             }
             temp->sibling=min_mem->sibling; //temp wird mit min_mem->sibling verbunden
             if(min_child != nullptr){ //wenn a ein Nachfolger hatte
+                //FIXME: Ausgabe nach fix wieder entfernen
+                cout << "extractMin() a hat einen Nachfolger" << endl;
                 Node* x= min_mem->child->sibling; //x ist der Nachfolger von min_mem
                 min_mem->child->sibling=nullptr; //min_mem->child->sibling wird auf null gesetzt
                 head=heapmerge(x,head); //x wird mit head verbunden
@@ -310,12 +320,22 @@ struct BinHeap {
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
     bool contains (Entry* e){
+        //FIXME: Ausgabe nach fix wieder entfernen
+        cout << "contains() Beginn der Funktion" << endl;
         if(e == nullptr) return false; //ist e ein Nullzeiger?
         else{
-            Node* n=e->node;
-            while(n->parent != nullptr) n= n->parent;
+            //FIXME: Ausgabe nach fix wieder entfernen
+            cout << "contains() e ist kein Nullzeiger" << endl;
+            Node* n = e->node;
+            while(n->parent != nullptr) {
+                //FIXME: Ausgabe nach fix wieder entfernen
+                cout << "contains() while Schleife 2" << endl;
+                n = n->parent;
+            }
             Node* p=head;
             while (p->sibling != nullptr){
+                //FIXME: Ausgabe nach fix wieder entfernen
+                cout << "contains() while Schleife 2" << endl;
                 if(p==n) return true;
                 p=p->sibling;
             }
@@ -349,6 +369,8 @@ struct BinHeap {
             if(!(oldprio < p)){
                 //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
                 while(!(oldprio < p)) {
+                    //FIXME: Ausgabe nach fix wieder entfernen
+                    cout << "changePrio() while Schleife" << endl;
                     //Vertausche das Objekt mit seinem Vorgänger
                     swapEntry(e, n->parent->entry);
                 }
