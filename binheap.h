@@ -1,6 +1,7 @@
 // Vorzeichenlose ganze Zahl.
 using uint = unsigned int;
 
+
 // Als Binomial-Halde implementierte Minimum-Vorrangwarteschlange
 // mit Prioritäten des Typs P und zusätzlichen Daten des Typs D.
 // An der Stelle, an der BinHeap für einen bestimmten Typ P verwendet
@@ -70,12 +71,12 @@ struct BinHeap {
 
     // Ist die Halde momentan leer?
     bool isEmpty (){
-        return head == nullptr;
+        return (head == nullptr);
     }
 
     // Größe der Halde, d. h. Anzahl momentan gespeicherter Einträge
     // liefern.
-    uint size (){ ///TODO TESTING
+    uint size (){
         // Var. für das Zählen der Einträge.
         uint s = 0;
         // Pointer auf den aktuellen Wurzelknoten
@@ -84,7 +85,7 @@ struct BinHeap {
         // Bedingung ist, dass der Grad des Siblings des aktuellen Knotens kleiner als der Grad des aktuellen Knotens ist.
         while (n != nullptr){
             // Der Formel aus der Vorlesung folgend (Folie 101):
-            s += 2^n->degree;
+            s = s + (1 << n->degree);
             // neues n ist sibling.
             n = n->sibling;
         }
@@ -94,21 +95,18 @@ struct BinHeap {
     // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
     // zur Halde hinzufügen und zurückliefern.
     Entry* insert (P p, D d){
+        cout << "insert" << endl;
         // Neuen Eintrag erzeugen.
         Entry* entry = new Entry(p, d);
         Node* node = new Node(entry);
-        heapmerge(head, node);
+        if (isEmpty()) head = node;
+        else head=heapmerge(head, node);
         return entry;
     }
 
-    // HILFSFUNKTION: swapnode swappt zwei Knoten.
-    void swapnode(Node* a, Node* b){
-        Node* swap = a;
-        a = b;
-        b = swap;
-    }
     // HILFSFUNKTION: treecount Gibt die anzahl der Bäume in der Halde zurück.
     uint treecount(Node* a){
+        cout << "treecount" << endl;
         uint count = 0;
         Node* n = a;
         while (n != nullptr){
@@ -119,87 +117,147 @@ struct BinHeap {
     }
 
     // HILFSFUNKTION: treeinsert, fügt einen Baum am Ende der Halde ein.
-    void treeinsert(Node* a, Node* b){
+    Node* treeinsert(Node* a, Node* b){
+        cout << "treeinsert" << endl;
         if (a == nullptr){
+            cout << "treeinsert nullptr" << endl;
             a = b;
         }
         else{
+            cout << "treeinsert else" << endl;
             Node* n = a;
             while (n->sibling != nullptr){
+                cout << "treeinsert else while" << endl;
                 n = n->sibling;
             }
             n->sibling = b;
+            a->sibling->sibling = nullptr;
         }
+
+        return a;
     }
 
     // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
-    Node* treemerge(Node* a, Node* b){
+    Node* oldtreemerge(Node* a, Node* b){
+        cout << "treemerge" << endl;
         // Ist die Priorität des ersten Baumes(a) Größer als die des zweiten Baumes(b)?
         if (b->entry->prio < a->entry->prio) {
+            cout << "treemerge prioswap" << endl;
             // Wenn ja wird a und b getauscht.
             // Da ja die Priorität von a größer ist muss a teilbaum von b werden.
-            swapnode(a, b);
+            Node* swap = a;
+            a = b;
+            b = swap;
         }
         // Führe nun Merge aus.
         Node* temp = a->child;
         a->child = b;
         b->parent = a;
         b->sibling = temp;
-        while (temp->degree!=0){
-            temp = temp->sibling;
+        if (temp != nullptr) {
+            while (temp->degree!=0){
+                temp = temp->sibling;
+            }
+            temp->sibling = b;
         }
-        temp->sibling = b;
         // Degree des neuen Wurzelknotens wird um 1 erhöht.
-        a->degree++;
+        a->degree = a->degree + 1;
+        a->sibling = nullptr;
         return a;
+    }
+
+    // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
+    Node* treemerge(Node* a, Node* b){
+        cout << "treemerge" << endl;
+        // Ist die Priorität des ersten Baumes(a) Größer als die des zweiten Baumes(b)?
+        if (b->entry->prio < a->entry->prio) {
+            b->sibling = nullptr;
+            b->degree = b->degree + 1;
+            a->parent = b;
+            if (b->child == nullptr){
+                b->child = a;
+                a->sibling = a;
+            }
+            else {
+                a->sibling = b->child->sibling;
+                b->child = a;
+                b->child->sibling = a;
+            }
+            return b;
+        }
+        else{
+            cout << "else" << endl;
+            a->sibling = nullptr;
+            a->degree = a->degree + 1;
+            b->parent = a;
+            if (a->child == nullptr){
+                a->child = b;
+                b->sibling = b;
+            }
+            else {
+                b->sibling = a->child->sibling;
+                a->child = b;
+                a->child->sibling = b;
+            }
+            return a;
+        }
     }
 
     // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
     Node* heapmerge (Node* a, Node* b){
         //Hilfvariablen
+        cout << "heapmerge" << endl;
         Node* temp = nullptr;
         Node* c = nullptr;
         uint k = 0;
         // Solange a und b nicht leer sind.
-        while (a!=nullptr || b!=nullptr||temp!=nullptr){
+        while (a!=nullptr || b!=nullptr || temp!=nullptr){
+            cout << "heapmergewhile" << endl;
             // Ist a leer? (prüfen wegen fehler sonst mit degree)
             if (a!=nullptr) {
+                cout << "heapmergewhile a if" << endl;
                 // degree ist k?
                 if (a->degree == k) {
                     // Wenn ja a an temp anhängen.
-                    treeinsert(temp, a);
+                    temp = treeinsert(temp, a);
                     // a iterieren.
                     a = a->sibling;
                 }
             }
             // Ist b leer? (prüfen wegen fehler sonst mit degree)
             if (b!=nullptr) {
+                cout << "heapmergewhile b if" << endl;
                 // degree ist k?
                 if (b->degree == k) {
                     // Wenn ja b an temp anhängen.
-                    treeinsert(temp, b);
+                    temp = treeinsert(temp, b);
                     // b iterieren.
                     b = b->sibling;
                 }
             }
             // Zahl der Bäume in Temp == 1?
             if (treecount(temp) == 1) {
+                cout << "tree count == 1" << endl;
                 // Wenn ja, dann temp an c anhängen.
-                treeinsert(c, temp);
+                if (c!= nullptr && c->sibling != nullptr) cout << c->sibling->entry->prio << endl;
+                c = treeinsert(c, temp);
+                if (c->sibling != nullptr) cout << c->sibling->entry->prio << endl;
                 // temp leeren.
                 temp = nullptr;
             }
             // Zahl der Bäume in Temp == 3?
             if (treecount(temp) == 3) {
                 // Wenn ja, dann dritten Baum in Temp an c anhängen.
-                treeinsert(c, temp->sibling->sibling);
+                c = treeinsert(c, temp->sibling->sibling);
                 // Dritter Baum in Temp löschen.
                 temp->sibling->sibling = nullptr;
             }
             // Zahl der Bäume in Temp == 2?
             if (treecount(temp) == 2) {
+                cout << "treecount == 2" << endl;
                 // Wenn ja, dann Beide Bäume Mergen
                 temp = treemerge(temp, temp->sibling);
+                cout << "survived treemerge" << endl;
             }
             // k um 1 erhöhen.
             k++;
@@ -333,9 +391,10 @@ struct BinHeap {
     }
 
     // HILFSFUNKTION: Baum ausgeben
-    void printTree(Node *n)
+    void oldprintTree(Node *n)
     {
-        while (n == nullptr)
+        cout << "PRINTTREE" << endl;
+        while (n != nullptr)
         {
             //Inhalt des Baums ausgeben
             cout << n->entry->prio << " " << n->entry->data << endl;
@@ -346,15 +405,51 @@ struct BinHeap {
         }
     }
 
+    void printTree(Node *n)
+    {
+//        while (n != nullptr)
+//        {
+//            n=n->sibling;
+//            while (n->degree < n->sibling->degree)
+//            {
+//                cout << n->entry->prio << " " << n->entry->data << endl;
+//                n=n->sibling;
+//            }
+//            n = n->child;
+//        }
+        cout << n->entry->prio << " " << n->entry->data << endl;
+        if (n->child != nullptr) {
+            cout << " ";
+            if (n->child->sibling != nullptr) printTree(n->child->sibling);
+            else printTree(n->child);
+        }
+        if ((n->sibling != nullptr) && (n->degree < n->sibling->degree)) printTree(n->sibling);
+    }
+
     // Inhalt der Halde zu Testzwecken ausgeben.
-    void dump (){
+    void olddump (){
+        cout << "PENISDUMP" << endl;
         // Inhalt der Halde ausgeben
         Node *n = head;
         int i = 0;
         while(i != size()){
+            cout << "DUMPWHILE" << endl;
             cout << " ";
-            printTree(n->sibling);
+            printTree(n);
             i++;
+        }
+    }
+    void dump (){
+        cout << "dump" << endl;
+        Node *n = head;
+        while (n != nullptr) {
+            cout << n->entry->prio << " " << n->entry->data << endl;
+            if (n->child != nullptr) {
+                cout << " ";
+                if (n->child->sibling != nullptr) printTree(n->child->sibling);
+                else printTree(n->child);
+            }
+            n = n->sibling;
         }
     }
 };
