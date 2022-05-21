@@ -268,8 +268,7 @@ struct BinHeap {
     // HILSFUNKTION: vertauscht zwei entry Objekte
     void swapEntry(Entry* a, Entry* b){
         Entry* tempa = a;
-        Entry* tempb = b;
-        a = tempb;
+        a = b;
         b = tempa;
     }
     // Priorität des Eintrags e auf p ändern.
@@ -288,10 +287,9 @@ struct BinHeap {
             // Setze die Priorität des Objekts auf die neue Priorität
             e->prio = p;
             //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
-            //TODO: Auf "gleich" prüfen ohne "="-Operator zu nutzen
-            if(p < oldprio){
+            if(!(oldprio < p)){
                 //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
-                while(p < oldprio) {
+                while(!(oldprio < p)) {
                     //Vertausche das Objekt mit seinem Vorgänger
                     swapEntry(e, e->parent);
                 }
@@ -336,7 +334,7 @@ struct BinHeap {
     // HILFSFUNKTION: Baum ausgeben
     void printTree(Node *n)
     {
-        while (n)
+        while (n == nullptr)
         {
             //Inhalt des Baums ausgeben
             cout << n->entry->prio << " " << n->entry->data << endl;
