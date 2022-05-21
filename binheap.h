@@ -279,23 +279,24 @@ struct BinHeap {
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool changePrio (Entry* e, P p){
         P oldprio = e->prio;
+        Node *n = e->node; //e->node->parent->entry
         if(e == nullptr || !(contains(e))){ //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
             return false; //wenn nicht, dann false zurückgeben
         }
         //Ansonsten Priorität ändern
         else {
             // Setze die Priorität des Objekts auf die neue Priorität
-            e->prio = p;
+            n->entry->prio = p;
             //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
             if(!(oldprio < p)){
                 //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
                 while(!(oldprio < p)) {
                     //Vertausche das Objekt mit seinem Vorgänger
-                    swapEntry(e, e->parent);
+                    swapEntry(e, n->parent->entry);
                 }
             }
             //Sofern sich das Objekt nicht in einem Blattknoten befindet
-            else if(e->child != nullptr){
+            else if (n->child->entry != nullptr){
                 //Entferne das Objekt
                 e->remove();
                 //Füge das Objekt mit der neuen Priorität wieder ein
@@ -339,7 +340,6 @@ struct BinHeap {
             //Inhalt des Baums ausgeben
             cout << n->entry->prio << " " << n->entry->data << endl;
             //Aufruf mit Child von n
-            //Print indentation for every recursion of printTree
             printTree(n->child);
             //Setze n auf den nächsten Sibling
             n = n->sibling;
@@ -353,9 +353,8 @@ struct BinHeap {
         int i = 0;
         while(i != size()){
             cout << " ";
-            //printTree(*n);
+            printTree(*n->sibling);
             i++;
         }
     }
-
 };
