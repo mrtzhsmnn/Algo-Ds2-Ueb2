@@ -230,12 +230,12 @@ struct BinHeap {
     Entry* extractMin (){ ///TODO REFINEMENT
         if(isEmpty()) return nullptr; //wenn Halde leer ist
         else{ //wenn Halde nicht leer ist
-            Node *min=minimum(); //minimum wird gesucht und in min gespeichert!
-            Node *min_mem=min; //min_mem merkt sich min (um min zu löschen)
-            Node *min_child=min->child; //min_child ist der child von min.
-            min->remove(); //min wird aus der Halde entfernt
-            Node* temp=nullptr; //temp ist ein leeres Baum
-            temp=head; //temp wird head gespeichert
+            Node* min = minimum()->node; //minimum wird gesucht und in min gespeichert!
+            Node* min_mem = min; //min_mem merkt sich min (um min zu löschen)
+            Node* min_child = min->child; //min_child ist der child von min.
+            remove(min->entry); //min wird aus der Halde entfernt
+            Node* temp = nullptr; //temp ist ein leerer Baum
+            temp = head; //in temp wird head gespeichert
             while(temp->sibling!=min_mem){
                 temp=temp->sibling;
             }
