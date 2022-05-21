@@ -353,7 +353,7 @@ struct BinHeap {
         int i = 0;
         while(i != size()){
             cout << " ";
-            printTree(*n->sibling);
+            printTree(n->sibling);
             i++;
         }
     }
