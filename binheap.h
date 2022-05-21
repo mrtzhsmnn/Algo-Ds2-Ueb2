@@ -131,9 +131,8 @@ struct BinHeap {
                 n = n->sibling;
             }
             n->sibling = b;
-            a->sibling->sibling = nullptr;
+            n->sibling->sibling = nullptr;
         }
-
         return a;
     }
 
@@ -165,6 +164,8 @@ struct BinHeap {
         a->sibling = nullptr;
         return a;
     }
+
+
 
     // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
     Node* treemerge(Node* a, Node* b){
@@ -203,23 +204,32 @@ struct BinHeap {
         }
     }
 
+    // HILFSFUNKTION:memsize
+    uint memsize(Node** mem){
+        uint ret = sizeof(mem)/sizeof(mem[0]);
+        return ret;
+    }
+
+
     // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
     Node* heapmerge (Node* a, Node* b){
         //Hilfvariablen
         cout << "heapmerge" << endl;
-        Node* temp = nullptr;
         Node* c = nullptr;
         uint k = 0;
+        uint i = 0;
+        Node** mem = new Node*[3]();
         // Solange a und b nicht leer sind.
-        while (a!=nullptr || b!=nullptr || temp!=nullptr){
+        while (a!=nullptr || b!=nullptr || i!=0){
             cout << "heapmergewhile" << endl;
             // Ist a leer? (prüfen wegen fehler sonst mit degree)
             if (a!=nullptr) {
                 cout << "heapmergewhile a if" << endl;
                 // degree ist k?
                 if (a->degree == k) {
-                    // Wenn ja a an temp anhängen.
-                    temp = treeinsert(temp, a);
+                    // Wenn ja a an mem anhängen.
+                    mem[i] = a;
+                    i++;
                     // a iterieren.
                     a = a->sibling;
                 }
@@ -229,34 +239,40 @@ struct BinHeap {
                 cout << "heapmergewhile b if" << endl;
                 // degree ist k?
                 if (b->degree == k) {
-                    // Wenn ja b an temp anhängen.
-                    temp = treeinsert(temp, b);
+                    // Wenn ja b an mem anhängen.
+                    mem[i] = b;
+                    i++;
                     // b iterieren.
                     b = b->sibling;
                 }
             }
             // Zahl der Bäume in Temp == 1?
-            if (treecount(temp) == 1) {
+            if (i == 1) {
                 cout << "tree count == 1" << endl;
-                // Wenn ja, dann temp an c anhängen.
-                if (c!= nullptr && c->sibling != nullptr) cout << c->sibling->entry->prio << endl;
-                c = treeinsert(c, temp);
-                if (c->sibling != nullptr) cout << c->sibling->entry->prio << endl;
-                // temp leeren.
-                temp = nullptr;
+                // Wenn ja, dann mem[0] an c anhängen.
+                c = treeinsert(c, mem[0]);
+                // mem leeren.
+                mem[0] = nullptr;
+                i--;
             }
             // Zahl der Bäume in Temp == 3?
-            if (treecount(temp) == 3) {
-                // Wenn ja, dann dritten Baum in Temp an c anhängen.
-                c = treeinsert(c, temp->sibling->sibling);
-                // Dritter Baum in Temp löschen.
-                temp->sibling->sibling = nullptr;
+            if (i == 3) {
+                cout << "treecount == 3" << endl;
+                // Wenn ja, dann ersten Baum in Temp an c anhängen.
+                c = treeinsert(c, mem[0]);
+                // erster Baum in mem löschen
+                mem[0] = mem[1];
+                mem[1] = mem[2];
+                mem[2] = nullptr;
+                i--;
             }
             // Zahl der Bäume in Temp == 2?
-            if (treecount(temp) == 2) {
+            if (i == 2) {
                 cout << "treecount == 2" << endl;
                 // Wenn ja, dann Beide Bäume Mergen
-                temp = treemerge(temp, temp->sibling);
+                mem[0] = treemerge(mem[0], mem[1]);
+                mem[1] = nullptr;
+                i--;
                 cout << "survived treemerge" << endl;
             }
             // k um 1 erhöhen.
@@ -461,7 +477,8 @@ struct BinHeap {
             i++;
         }
     }
-    void dump (){
+
+    void newdump (){
         cout << "dump" << endl;
         Node *n = head;
         while (n != nullptr) {
