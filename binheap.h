@@ -231,9 +231,7 @@ struct BinHeap {
             Node *n = head;
             Node *n_mem = nullptr;
             while (n != nullptr){
-                //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "minimum() while Schleife" << endl;
-                if(n->entry->prio < n_mem->entry->prio || n_mem == nullptr){
+                if(n_mem == nullptr || n->entry->prio < n_mem->entry->prio){
                     n_mem = n;
                 }
                 n=n->sibling;
@@ -242,38 +240,37 @@ struct BinHeap {
         }
     }
 
-    // Eintrag mit minimaler Priorität liefern
-    // und aus der Halde entfernen (aber nicht freigeben).
-    // (Bei einer leeren Halde wirkungslos mit Nullzeiger als Resultatwert.)
-    Entry* extractMin (){
-        //FIXME: Ausgabe nach fix wieder entfernen
-        cout << "extractMin() Beginn der Funktion" << endl;
-        if(isEmpty()) return nullptr; //wenn Halde leer ist
-        else{ //wenn Halde nicht leer ist
-            //FIXME: Ausgabe nach fix wieder entfernen
-            cout << "extractMin() Halde ist nicht leer" << endl;
-            Node* min = minimum()->node; //minimum wird gesucht und in min gespeichert!
-            Node* min_mem = min; //min_mem merkt sich min (um min zu löschen)
-            Node* min_child = min->child; //min_child ist der child von min.
-            remove(min->entry); //min wird aus der Halde entfernt
-            Node* temp = nullptr; //temp ist ein leerer Baum
-            temp = head; //in temp wird head gespeichert
-            while(temp->sibling!=min_mem){
-                //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "extractMin() while Schleife" << endl;
-                temp=temp->sibling;
-            }
-            temp->sibling=min_mem->sibling; //temp wird mit min_mem->sibling verbunden
-            if(min_child != nullptr){ //wenn a ein Nachfolger hatte
-                //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "extractMin() a hat einen Nachfolger" << endl;
-                Node* x= min_mem->child->sibling; //x ist der Nachfolger von min_mem
-                min_mem->child->sibling=nullptr; //min_mem->child->sibling wird auf null gesetzt
-                head=heapmerge(x,head); //x wird mit head verbunden
-            }
-            return min_mem->entry; //min_mem wird zurückgegeben
+
+    // Funktion extracMin() zum extrahieren von des Minimums
+    Entry* extractMin(){
+        if(isEmpty()) return nullptr; // falls leer -> nullptr
+        Entry* retmin = minimum();
+        // min = minimum node
+        Node* min = retmin->node;
+        Node* prev = head;
+        Node* temp = nullptr;
+        Node* post = min->sibling;
+        while((prev->sibling != nullptr) && (prev->sibling!=min)){
+            prev = prev->sibling;
         }
+        if (min == head){
+            head = post;
+        }
+        else prev->sibling = post;
+        min->sibling = nullptr;
+        if (min->child != nullptr){
+            temp = min->child->sibling;
+            min->child->sibling = nullptr;
+            min = temp;
+            while(temp!= nullptr){
+                temp->parent = nullptr;
+                temp = temp->sibling;
+            }
+            head = heapmerge(head, min);
+        }
+        return retmin;
     }
+
 
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
@@ -287,11 +284,11 @@ struct BinHeap {
             Node* n = e->node;
             while(n->parent != nullptr) {
                 //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "contains() while Schleife 2" << endl;
+                cout << "contains() while Schleife 1" << endl;
                 n = n->parent;
             }
-            Node* p=head;
-            while (p->sibling != nullptr){
+            Node* p = this->head;
+            while (p != nullptr){
                 //FIXME: Ausgabe nach fix wieder entfernen
                 cout << "contains() while Schleife 2" << endl;
                 if(p==n) return true;
@@ -349,9 +346,7 @@ struct BinHeap {
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool remove (Entry* e){
-        if(e != nullptr || !(contains(e))){
-            return false;
-        }
+        if(e == nullptr || !(contains(e))) return false;
         else {
             //Entnimm das Objekt mit minimaler Priorität
             Entry* min = extractMin();
@@ -366,6 +361,7 @@ struct BinHeap {
                 //Setze die Priorität des zu entfernenden Objekts wieder auf ihren ursprünglichen Wert
                 e->prio = temp;
             }
+
             return true;
         }
     }
