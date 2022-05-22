@@ -275,22 +275,14 @@ struct BinHeap {
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
     bool contains (Entry* e){
-        //FIXME: Ausgabe nach fix wieder entfernen
-        cout << "contains() Beginn der Funktion" << endl;
         if(e == nullptr) return false; //ist e ein Nullzeiger?
         else{
-            //FIXME: Ausgabe nach fix wieder entfernen
-            cout << "contains() e ist kein Nullzeiger" << endl;
             Node* n = e->node;
             while(n->parent != nullptr) {
-                //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "contains() while Schleife 1" << endl;
                 n = n->parent;
             }
             Node* p = this->head;
             while (p != nullptr){
-                //FIXME: Ausgabe nach fix wieder entfernen
-                cout << "contains() while Schleife 2" << endl;
                 if(p==n) return true;
                 p=p->sibling;
             }
