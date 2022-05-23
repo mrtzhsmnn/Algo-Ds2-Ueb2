@@ -370,8 +370,7 @@ struct BinHeap {
         s--;
         if (n->child != nullptr) {
             depth++;
-            n = n->child->sibling;
-            printTree(n, depth, s);
+            printTree(n->child->sibling, depth, s);
         }
         else if (n->sibling == n) {
             depth--;
@@ -382,11 +381,9 @@ struct BinHeap {
         }
     }
     void dump (){
-        Node *rootptr = head;
-        Node *n = nullptr;
         uint depth = 0;
         uint s = 0;
         s = size();
-        printTree(rootptr, depth, s);
+        printTree(head, depth, s);
     }
 };
