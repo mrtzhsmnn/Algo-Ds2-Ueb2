@@ -310,6 +310,27 @@ struct BinHeap {
         }
         //Ansonsten Priorität ändern
         else {
+            Node* neu = nullptr;
+            Node* tempnode = nullptr;
+            Entry* tempentry = nullptr;
+            bool found = false;
+            while(!found) {
+                tempentry = extractMin();
+                if(tempentry == e) {
+                    found = true;
+                    tempnode = tempentry->node;
+                    tempentry->prio = p;
+                    neu = heapmerge(neu, tempnode);
+                    head = heapmerge(neu, head);
+                }
+                else {
+                    tempnode = tempentry->node;
+                    neu = heapmerge(neu, tempnode);
+                }
+
+            }
+            return found;
+            /*
             // Setze die Priorität des Objekts auf die neue Priorität
             n->entry->prio = p;
             //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
@@ -329,6 +350,7 @@ struct BinHeap {
                 //Füge das Objekt mit der neuen Priorität wieder ein
                 insert(p,e->data);
             }
+            */
             //true zurückgeben
             return true;
         }
