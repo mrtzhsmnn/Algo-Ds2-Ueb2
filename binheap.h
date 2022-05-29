@@ -163,6 +163,9 @@ struct BinHeap {
 
     // HILFSFUNKTION: heapmerge, vereinigt zwei Halden und liefert eine neue halde zurück.
     Node* heapmerge (Node* a, Node* b){
+        if (a == nullptr && b == nullptr) return nullptr;
+        if (a==nullptr) return b;
+        if (b==nullptr) return a;
         //Hilfvariablen
         Node* c = nullptr;
         uint k = 0;
@@ -305,35 +308,45 @@ struct BinHeap {
     // (Wirkungslos mit Resultatwert false, wenn e ein Nullzeiger ist
     // oder e nicht zur aktuellen Halde gehört; sonst Resultatwert true.)
     bool changePrio (Entry* e, P p){
-        P oldprio = e->prio;
-        Node *n = e->node; //e->node->parent->entry
-        if(e == nullptr || !(contains(e))){ //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
-            return false; //wenn nicht, dann false zurückgeben
+        //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
+        if(e == nullptr || !(contains(e))){
+            return false; // dann false zurückgeben
         }
-        //Ansonsten Priorität ändern
+        // Ansonsten Priorität ändern
         else {
-            //
+            // Nodepointer neu, tempnode und Entrypointer tempentry mit nullptr initialisieren
             Node* neu = nullptr;
             Node* tempnode = nullptr;
             Entry* tempentry = nullptr;
+            // Bool zum prüfen ob e schon gefunden wurde.
             bool found = false;
+            // Wenn bool nicht true dann While-Schleife
             while(!found) {
+                // Tempentry wird mit dem extrahierten Minimum gefüllt
                 tempentry = extractMin();
+                // ist tempentry gleich dem e?
                 if(tempentry == e) {
-                    cout << "found" << endl;
+                    // dann found auf true setzen
                     found = true;
+                    // tempnode wird mit node von tempentry gefüllt
                     tempnode = tempentry->node;
+                    // tempnode Grad wird auf 0 gesetzt
                     tempnode->degree = 0;
+                    tempnode->parent = nullptr;
+                    tempnode->child = nullptr;
+                    tempnode->sibling = nullptr;
+                    // tempentry Priorität auf p setzen
                     tempentry->prio = p;
-                    if (tempnode->sibling != nullptr) {
-                        cout << "tempnode->sibling: " << tempnode->sibling->entry->prio << endl;
-                    }
+                    // neu wird mit Heapmerge von neu und tempnode gefüllt
                     neu = heapmerge(neu, tempnode);
                     head = heapmerge(neu, head);
                 }
                 else {
-                    cout << "not found" << endl;
                     tempnode = tempentry->node;
+                    tempnode->degree = 0;
+                    tempnode->parent = nullptr;
+                    tempnode->child = nullptr;
+                    tempnode->sibling = nullptr;
                     neu = heapmerge(neu, tempnode);
                 }
 
