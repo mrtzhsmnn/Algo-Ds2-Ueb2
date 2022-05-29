@@ -296,6 +296,8 @@ struct BinHeap {
         a = b;
         b = tempa;
     }
+
+
     // Priorität des Eintrags e auf p ändern.
     // Hierbei darf auf keinen Fall ein neues Entry-Objekt entstehen,
     // selbst wenn die Operation intern als Entfernen und Neu-Einfügen
@@ -310,6 +312,7 @@ struct BinHeap {
         }
         //Ansonsten Priorität ändern
         else {
+            //
             Node* neu = nullptr;
             Node* tempnode = nullptr;
             Entry* tempentry = nullptr;
@@ -317,13 +320,19 @@ struct BinHeap {
             while(!found) {
                 tempentry = extractMin();
                 if(tempentry == e) {
+                    cout << "found" << endl;
                     found = true;
                     tempnode = tempentry->node;
+                    tempnode->degree = 0;
                     tempentry->prio = p;
+                    if (tempnode->sibling != nullptr) {
+                        cout << "tempnode->sibling: " << tempnode->sibling->entry->prio << endl;
+                    }
                     neu = heapmerge(neu, tempnode);
                     head = heapmerge(neu, head);
                 }
                 else {
+                    cout << "not found" << endl;
                     tempnode = tempentry->node;
                     neu = heapmerge(neu, tempnode);
                 }
