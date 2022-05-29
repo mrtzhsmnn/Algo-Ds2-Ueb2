@@ -98,7 +98,9 @@ struct BinHeap {
         // Neuen Eintrag erzeugen.
         Entry* entry = new Entry(p, d);
         Node* node = new Node(entry);
+        // Wenn die Halde leer ist, ist der neue Knoten die Wurzel.
         if (isEmpty()) head = node;
+        // Wenn nicht, dann Heapmerge
         else head=heapmerge(head, node);
         return entry;
     }
@@ -106,14 +108,18 @@ struct BinHeap {
 
     // HILFSFUNKTION: treeinsert, fügt einen Baum am Ende der Halde ein.
     Node* treeinsert(Node* a, Node* b){
+        // a nullptr?
         if (a == nullptr){
+            // a wird zu b
             a = b;
         }
         else{
             Node* n = a;
+            // While zum finden des letzten Knotens
             while (n->sibling != nullptr){
                 n = n->sibling;
             }
+            // Sibling von n wird b
             n->sibling = b;
             n->sibling->sibling = nullptr;
         }
@@ -123,10 +129,11 @@ struct BinHeap {
 
     // HILFSFUNKTION: treemerge, vereinigt zwei Bäume und liefert eine neue halde zurück.
     Node* treemerge(Node* a, Node* b){
+        // Anfängliche Prüfung:
         if (a == nullptr && b == nullptr) return nullptr;
         if (a==nullptr) return b;
         if (b==nullptr) return a;
-        // Ist die Priorität des ersten Baumes(a) Größer als die des zweiten Baumes(b)?
+        // PRÜFUNG ANALOG ZUR FOLIE:
         if (b->entry->prio < a->entry->prio) {
             b->sibling = nullptr;
             b->degree = b->degree + 1;
@@ -229,38 +236,53 @@ struct BinHeap {
     // Eintrag mit minimaler Priorität liefern.
     // (Nullzeiger bei einer leeren Halde.)
     Entry* minimum (){
-        if(isEmpty()) return nullptr; // falls leer, dann nullptr zurückgeben.
-        else { // sonst, dann den Eintrag mit minimaler Priorität suchen und zurückgeben.
+        // falls Halde leer, dann nullptr zurückgeben.
+        if(isEmpty()) return nullptr;
+        else {
+            // sonst, dann den Eintrag mit minimaler Priorität suchen und zurückgeben.
             Node *n = head;
             Node *n_mem = nullptr;
+            // durchlaufe die Liste der Wurzelknoten
             while (n != nullptr){
+                // Wenn n_mem leer oder prio Größer als prio von n:
                 if(n_mem == nullptr || n->entry->prio < n_mem->entry->prio){
+                    // dann n_mem auf n setzen.
                     n_mem = n;
                 }
+                // n weiterlaufen.
                 n=n->sibling;
             }
+            // Eintrag von n_mem zurückgeben.
             return n_mem->entry;
         }
     }
 
 
-    // Funktion extracMin() zum extrahieren von des Minimums
+    // Funktion extractMin() zum extrahieren von des Minimums
     Entry* extractMin(){
-        if(isEmpty()) return nullptr; // falls leer -> nullptr
+        // falls leer -> nullptr zurückgeben
+        if(isEmpty()) return nullptr;
         Entry* retmin = minimum();
         // min = minimum node
         Node* min = retmin->node;
+        // Hilfsvariablen
         Node* prev = head;
         Node* temp = nullptr;
+        // nachfolgervariable auf nachfolger von min
         Node* post = min->sibling;
+        // While zur des Vorgängers von min
         while((prev->sibling != nullptr) && (prev->sibling!=min)){
             prev = prev->sibling;
         }
+        // ist min der erste Knoten?
         if (min == head){
+            // dann setze head auf den nachfolger von min
             head = post;
         }
+        // wenn nicht, dann setze prev->sibling auf den nachfolger von min
         else prev->sibling = post;
         min->sibling = nullptr;
+        // sich um die Kinder Kümmern:
         if (min->child != nullptr){
             temp = min->child->sibling;
             min->child->sibling = nullptr;
@@ -278,26 +300,29 @@ struct BinHeap {
     // Enthält die Halde den Eintrag e?
     // Resultatwert false, wenn e ein Nullzeiger ist.
     bool contains (Entry* e){
-        if(e == nullptr) return false; //ist e ein Nullzeiger?
+        // ist e ein Nullzeiger?
+        if(e == nullptr) return false;
+        // wenn nicht:
         else{
+            // Nodepointer n wird auf den Knoten von e gesetzt.
             Node* n = e->node;
+            // Solange der Vaterknoten von n nicht nullptr ist.
             while(n->parent != nullptr) {
+                // n wird auf den Vaterknoten von n gesetzt.
                 n = n->parent;
             }
+            // Nodepointer p wird auf den Kopf der Halde gesetzt.
             Node* p = this->head;
+            // Solange p nicht nullptr ist.
             while (p != nullptr){
-                if(p==n) return true;
+                // Ist der Knoten von p gleich dem Knoten von n?
+                if(p==n) return true; // wenn ja, dann true zurückgeben.
+                // Halde weiter durchlaufen.
                 p=p->sibling;
             }
+            // falls der wurzelknoten zum eintrag nicht gefunden wurde, dann false zurückgeben.
             return false;
         }
-    }
-
-    // HILSFUNKTION: vertauscht zwei entry Objekte
-    void swapEntry(Entry* a, Entry* b){
-        Entry* tempa = a;
-        a = b;
-        b = tempa;
     }
 
 
@@ -332,49 +357,31 @@ struct BinHeap {
                     tempnode = tempentry->node;
                     // tempnode Grad wird auf 0 gesetzt
                     tempnode->degree = 0;
+                    // tempnode Parent wird auf nullptr gesetzt
                     tempnode->parent = nullptr;
+                    // tempnode Sibling wird auf nullptr gesetzt
                     tempnode->child = nullptr;
+                    // tempnode Entry wird auf nullptr gesetzt
                     tempnode->sibling = nullptr;
                     // tempentry Priorität auf p setzen
                     tempentry->prio = p;
                     // neu wird mit Heapmerge von neu und tempnode gefüllt
                     neu = heapmerge(neu, tempnode);
+                    // head wird mit heapmerge von head und neu gefüllt
                     head = heapmerge(neu, head);
                 }
-                else {
+                else { // sonst, also wenn tempentry nicht e ist
+                    // bekannte behandlung von tempnode (siehe oben)
                     tempnode = tempentry->node;
                     tempnode->degree = 0;
                     tempnode->parent = nullptr;
                     tempnode->child = nullptr;
                     tempnode->sibling = nullptr;
+                    // neu wird mit Heapmerge von neu und tempnode gefüllt
                     neu = heapmerge(neu, tempnode);
                 }
-
             }
             return found;
-            /*
-            // Setze die Priorität des Objekts auf die neue Priorität
-            n->entry->prio = p;
-            //Wenn die neue Priorität kleiner oder gleich der alten Priorität ist
-            if(!(oldprio < p)){
-                //Solange die Priorität des Objekts kleiner oder gleich der alten Priorität ist
-                while(!(oldprio < p)) {
-                    //FIXME: Ausgabe nach fix wieder entfernen
-                    cout << "changePrio() while Schleife" << endl;
-                    //Vertausche das Objekt mit seinem Vorgänger
-                    swapEntry(e, n->parent->entry);
-                }
-            }
-            //Sofern sich das Objekt nicht in einem Blattknoten befindet
-            else if (n->child->entry != nullptr){
-                //Entferne das Objekt
-                remove(e);
-                //Füge das Objekt mit der neuen Priorität wieder ein
-                insert(p,e->data);
-            }
-            */
-            //true zurückgeben
-            return true;
         }
     }
 
@@ -397,21 +404,23 @@ struct BinHeap {
                 //Setze die Priorität des zu entfernenden Objekts wieder auf ihren ursprünglichen Wert
                 e->prio = temp;
             }
-
             return true;
         }
     }
 
 
-    void printTree(Node *n, uint depth, uint s)
-    {
+    void printTree(Node *n, uint depth, uint s) {
+        // abbruchbedingung der Rekursion
         if (n == nullptr||s <= 0) return;
+        // tiefe ausprinten
         for (uint i = 0; i < depth; i++)
         {
             cout << "  ";
         }
+        // ausgabe des eintrags
         cout << n->entry->prio << " " << n->entry->data << endl;
         s--;
+        // rekursiver Aufruf
         if (n->child != nullptr) {
             depth++;
             printTree(n->child->sibling, depth, s);
@@ -425,9 +434,11 @@ struct BinHeap {
         }
     }
     void dump (){
+        // Ausgabe der Halde
         uint depth = 0;
         uint s = 0;
         s = size();
+        // eigentlicher Aufruf der Rekursiven Ausgabefunktion
         printTree(head, depth, s);
     }
 };
