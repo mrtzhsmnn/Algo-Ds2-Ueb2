@@ -356,23 +356,27 @@ struct BinHeap {
             Node* n = e->node;
             Entry* mem = nullptr;
             // Neue Prio kleiner der Alten?
-            if (!(old < p)) {
+            if (p < old) {
                 // Solange die Priorität des Objekts kleiner als die seines Vorgängers ist
                 while (n->parent != nullptr && n->entry->prio < n->parent->entry->prio){
                     mem = n->entry;
                     n->entry = n->parent->entry;
+                    n->entry->node = n;
                     n->parent->entry = mem;
+                    n->parent->entry->node = n->parent;
                     n = n->parent;
                 }
+                return true;
             }
-            else if (n->child != nullptr) {
-                mem = e;
-                remove(e);
-                n->child = nullptr;
-                n->sibling = nullptr;
-                n->parent = nullptr;
-                n->degree = 0;
-                helpinsert(mem, n);
+            else {
+                if (e->node->child == nullptr) {
+                    return true;
+                }
+                else{
+                    remove(e);
+                    Node* in = new Node(e);
+                    head = heapmerge(head, in);
+                }
             }
             return true;
         }
