@@ -21,9 +21,16 @@ int main (int argc, char** argv) {
     // Feld mit allen eingefügten Einträgen, damit sie später
     // für remove und changePrio verwendet werden können.
     BinHeap<string, int>::Entry* entrys [100];
-
+    for (int i = 0; i<100; i++){
+        entrys[i] = nullptr;
+    }
     // Anzahl der bis jetzt eingefügten Einträge.
     uint n = 0;
+
+
+
+
+
 
     // Endlosschleife.
     while (true) {
@@ -58,17 +65,24 @@ int main (int argc, char** argv) {
             case '?': // minimum
                 e = heap.minimum();
                 if (echo) cout << endl;
-                cout << "minimum: " << e->prio << " " << e->data << endl;
+                if (e != nullptr) cout << "minimum: " << e->prio << " " << e->data << endl;
+                else cout << "Penis" << endl;
                 break;
             case '!': // extractMin
                 e = heap.extractMin();
                 if (echo) cout << endl;
-                cout << "minimum: " << e->prio << " " << e->data << endl;
+                if (e != nullptr) cout << "minimum: " << e->prio << " " << e->data << endl;
+                else cout << "Penis" << endl;
                 break;
             case '=': // changePrio entry prio
                 cin >> entry >> prio;
                 if (echo) cout << " " << entry << " " << prio << endl;
-                heap.changePrio(entrys[entry], prio);
+                cout << heap.changePrio(entrys[entry], prio) << endl;
+                break;
+            case 's': // isempty
+                if (echo) cout << endl;
+                if (heap.isEmpty()) cout << "leer!" << endl;
+                else cout << "nichtleer!" << endl;
                 break;
             case 'q': // quit
                 if (echo) cout << endl;
