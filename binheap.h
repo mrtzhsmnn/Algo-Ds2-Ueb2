@@ -335,6 +335,7 @@ struct BinHeap {
     bool changePrio (Entry* e, P p){
         //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
         if(e == nullptr || !(contains(e))){
+            cout << "Eintrag nicht in Halde" << endl;
             return false; // dann false zurückgeben
         }
         // Ansonsten Priorität ändern
@@ -349,6 +350,10 @@ struct BinHeap {
             while(!found) {
                 // Tempentry wird mit dem extrahierten Minimum gefüllt
                 tempentry = extractMin();
+                if (tempentry == nullptr) {
+                    head = neu;
+                    return false;
+                }
                 // ist tempentry gleich dem e?
                 if(tempentry == e) {
                     // dann found auf true setzen
