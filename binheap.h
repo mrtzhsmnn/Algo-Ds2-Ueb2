@@ -105,6 +105,16 @@ struct BinHeap {
         return entry;
     }
 
+    // Neuen Eintrag mit Priorität p und zusätzlichen Daten d erzeugen,
+    // zur Halde hinzufügen und zurückliefern.
+    Entry* helpinsert (Entry* entry, Node* node){
+        // Wenn die Halde leer ist, ist der neue Knoten die Wurzel.
+        if (isEmpty()) head = node;
+            // Wenn nicht, dann Heapmerge
+        else head=heapmerge(head, node);
+        return entry;
+    }
+
 
     // HILFSFUNKTION: treeinsert, fügt einen Baum am Ende der Halde ein.
     Node* treeinsert(Node* a, Node* b){
@@ -335,58 +345,36 @@ struct BinHeap {
     bool changePrio (Entry* e, P p){
         //wenn e ein Nullzeiger ist oder e nicht zur aktuellen Halde gehört
         if(e == nullptr || !(contains(e))){
-            cout << "Eintrag nicht in Halde" << endl;
             return false; // dann false zurückgeben
         }
         // Ansonsten Priorität ändern
         else {
-            // Nodepointer neu, tempnode und Entrypointer tempentry mit nullptr initialisieren
-            Node* neu = nullptr;
-            Node* tempnode = nullptr;
-            Entry* tempentry = nullptr;
-            // Bool zum prüfen ob e schon gefunden wurde.
-            bool found = false;
-            // Wenn bool nicht true dann While-Schleife
-            while(!found) {
-                // Tempentry wird mit dem extrahierten Minimum gefüllt
-                tempentry = extractMin();
-                if (tempentry == nullptr) {
-                    head = neu;
-                    return false;
-                }
-                // ist tempentry gleich dem e?
-                if(tempentry == e) {
-                    // dann found auf true setzen
-                    found = true;
-                    // tempnode wird mit node von tempentry gefüllt
-                    tempnode = tempentry->node;
-                    // tempnode Grad wird auf 0 gesetzt
-                    tempnode->degree = 0;
-                    // tempnode Parent wird auf nullptr gesetzt
-                    tempnode->parent = nullptr;
-                    // tempnode Sibling wird auf nullptr gesetzt
-                    tempnode->child = nullptr;
-                    // tempnode Entry wird auf nullptr gesetzt
-                    tempnode->sibling = nullptr;
-                    // tempentry Priorität auf p setzen
-                    tempentry->prio = p;
-                    // neu wird mit Heapmerge von neu und tempnode gefüllt
-                    neu = heapmerge(neu, tempnode);
-                    // head wird mit heapmerge von head und neu gefüllt
-                    head = heapmerge(neu, head);
-                }
-                else { // sonst, also wenn tempentry nicht e ist
-                    // bekannte behandlung von tempnode (siehe oben)
-                    tempnode = tempentry->node;
-                    tempnode->degree = 0;
-                    tempnode->parent = nullptr;
-                    tempnode->child = nullptr;
-                    tempnode->sibling = nullptr;
-                    // neu wird mit Heapmerge von neu und tempnode gefüllt
-                    neu = heapmerge(neu, tempnode);
+            // Eintrag von e auf p setzen.
+            P old = e->prio;
+            e->prio = p;
+            // Hilfsvariablen
+            Node* n = e->node;
+            Entry* mem = nullptr;
+            // Neue Prio kleiner der Alten?
+            if (!(old < p)) {
+                // Solange die Priorität des Objekts kleiner als die seines Vorgängers ist
+                while (n->parent != nullptr && n->entry->prio < n->parent->entry->prio){
+                    mem = n->entry;
+                    n->entry = n->parent->entry;
+                    n->parent->entry = mem;
+                    n = n->parent;
                 }
             }
-            return found;
+            else if (n->child != nullptr) {
+                mem = e;
+                remove(e);
+                n->child = nullptr;
+                n->sibling = nullptr;
+                n->parent = nullptr;
+                n->degree = 0;
+                helpinsert(mem, n);
+            }
+            return true;
         }
     }
 

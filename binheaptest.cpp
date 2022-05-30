@@ -77,7 +77,7 @@ int main (int argc, char** argv) {
             case '=': // changePrio entry prio
                 cin >> entry >> prio;
                 if (echo) cout << " " << entry << " " << prio << endl;
-                cout << heap.changePrio(entrys[entry], prio) << endl;
+                heap.changePrio(entrys[entry], prio);
                 break;
             case 's': // isempty
                 if (echo) cout << endl;
