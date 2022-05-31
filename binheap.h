@@ -366,13 +366,9 @@ struct BinHeap {
                     n->parent->entry->node = n->parent;
                     n = n->parent;
                 }
-                return true;
             }
             else {
-                if (e->node->child == nullptr) {
-                    return true;
-                }
-                else{
+                if (e->node->child != nullptr) {
                     remove(e);
                     Node* in = new Node(e);
                     head = heapmerge(head, in);
