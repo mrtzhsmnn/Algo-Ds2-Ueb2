@@ -125,7 +125,7 @@ struct BinHeap {
         }
         else{
             Node* n = a;
-            // While zum finden des letzten Knotens
+            // While zum Finden des letzten Knotens
             while (n->sibling != nullptr){
                 n = n->sibling;
             }
